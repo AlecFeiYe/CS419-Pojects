@@ -39,30 +39,39 @@ public class Simulator {
     }
 
     public static void main(String[] args) throws Exception {
-       
+
         String filePath = "OS Projects/workload.txt";
 
         // 1. FCFS 
-        System.out.println("  Running FCFS  ");
+        System.out.println("----------  Running FCFS  ----------\n");
         List<Process> workloadFCFS = TraceParser.parseWorkload(filePath);
         SchedulingAlgo algoFCFS = new FCFS();
         Kernel kernelFCFS = new Kernel(algoFCFS);
         Simulator simFCFS = new Simulator(kernelFCFS, workloadFCFS);
         simFCFS.run();
+        System.out.println("Average Waiting Time: " + kernelFCFS.getAverageWaitingTime()+"\n");
 
         // 2. SJF 
-        System.out.println("\n  Running SJF  ");
+        System.out.println("----------  Running SJF  ----------\n");
         List<Process> workloadSJF = TraceParser.parseWorkload(filePath);
         SchedulingAlgo algoSJF = new SJF();
         Kernel kernelSJF = new Kernel(algoSJF);
         Simulator simSJF = new Simulator(kernelSJF, workloadSJF);
         simSJF.run();
+        System.out.println("Average Waiting Time: " + kernelSJF.getAverageWaitingTime()+"\n");
 
         // 3. RR 
-        System.out.println("\n  Running RR  ");
+        System.out.println("----------  Running RR  ----------\n");
         List<Process> workloadRR = TraceParser.parseWorkload(filePath);
         SchedulingAlgo algoRR = new RR();
         Kernel kernelRR = new Kernel(algoRR);
         Simulator simRR = new Simulator(kernelRR, workloadRR);
         simRR.run();
+        System.out.println("Average Waiting Time: " + kernelRR.getAverageWaitingTime()+"\n");
+
+        System.out.println("----------  Conclusion and Comparing  ----------\n");
+        System.out.println("FCFS Average Waiting Time: " + kernelFCFS.getAverageWaitingTime());
+        System.out.println("SJF Average Waiting Time: " + kernelSJF.getAverageWaitingTime());
+        System.out.println("RR Average Waiting Time: " + kernelRR.getAverageWaitingTime());
     }
+};
