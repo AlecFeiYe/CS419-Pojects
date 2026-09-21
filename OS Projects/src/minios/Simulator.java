@@ -42,8 +42,8 @@ public class Simulator {
         List<Process> workload = TraceParser.parseWorkload("OS Projects/workload.txt");
 
         //SchedulingAlgo algo = new FCFS();
-        SchedulingAlgo algo = new SJF();
-        //SchedulingAlgo algo = new RR();
+        //SchedulingAlgo algo = new SJF();
+        SchedulingAlgo algo = new RR();
         Kernel kernel = new Kernel(algo);
         Simulator sim = new Simulator(kernel, workload);
 

@@ -66,7 +66,20 @@ public class Kernel {
             // CPU instruction: the instruction has not finished;
             // Utilize one CPU cycle
             else if (inst.remainingTicks > 0) {
+
+                if (algo instanceof RR && ((RR) algo).isQuantumExpired()) {
+                    runningProcess.state = Process.State.READY;
+                    algo.addProcess(readyQueue, runningProcess);
+                    runningProcess = null;
+                    continue;
+                }
+
                 inst.remainingTicks--;
+
+                if (algo instanceof RR) {
+                    ((RR) algo).onCpuTick();
+                }
+
                 cpuCycleUsed = true;
                 if (inst.remainingTicks == 0) {
                     // The instruction now finishes; load the next
