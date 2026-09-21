@@ -9,12 +9,15 @@ public class Kernel {
     private final List<Process> readyQueue = new ArrayList<>();
     private final List<Process> waitQueue = new ArrayList<>();
     private Process runningProcess = null;
+    private long totalWaitingTime = 0;
+    private int processCount = 0;
 
     public Kernel(SchedulingAlgo algo) {
         this.algo = algo;
     }
 
     public void admitProcess(Process p) {
+        processCount++;
         p.state = Process.State.READY;
         algo.addProcess(readyQueue, p);
     }
@@ -30,7 +33,7 @@ public class Kernel {
         while (!cpuCycleUsed) {
             // No process currently running
             if (runningProcess == null) {
-                if (dispatchNextProcess(currentTime) == null){
+                if (dispatchNextProcess(currentTime) == null) {
                     // No more process to schedule; simulation finishes.
                     break;
                 }
@@ -62,7 +65,7 @@ public class Kernel {
 
             // CPU instruction: the instruction has not finished;
             // Utilize one CPU cycle
-            else if(inst.remainingTicks > 0){
+            else if (inst.remainingTicks > 0) {
                 inst.remainingTicks--;
                 cpuCycleUsed = true;
                 if (inst.remainingTicks == 0) {
@@ -75,13 +78,14 @@ public class Kernel {
             // CPU instruction: the instruction has finished
             // (should never come here as this is already handled above,
             // but just in case...)
-            else{
+            else {
                 runningProcess.programCounter++;
                 // Can't advance the simulation clock. Loop back
                 // and move to the next instruction.
                 continue;
             }
         }
+        totalWaitingTime += readyQueue.size();
     }
 
     private void serviceWaitQueue(int currentTime) {
@@ -116,7 +120,7 @@ public class Kernel {
             System.out.println("[Tick " + currentTime + "] Process " + runningProcess.pid + " executes.");
             runningProcess.state = Process.State.RUNNING;
             return runningProcess;
-        }else{
+        } else {
             return null;
         }
 
@@ -126,5 +130,12 @@ public class Kernel {
         return runningProcess == null &&
                 readyQueue.isEmpty() &&
                 waitQueue.isEmpty();
+    }
+
+    public double getAverageWaitingTime() {
+        if (processCount == 0) {
+            return 0;
+        }
+        return 1.0 * totalWaitingTime / processCount;
     }
 }

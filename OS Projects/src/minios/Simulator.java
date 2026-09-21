@@ -38,17 +38,18 @@ public class Simulator {
 
     }
 
-    public static void main(String[] args) throws Exception{
-            List<Process> workload = TraceParser.parseWorkload("workload.txt");
+    public static void main(String[] args) throws Exception {
+        List<Process> workload = TraceParser.parseWorkload("OS Projects/workload.txt");
 
-            SchedulingAlgo algo = new FCFS();
-        //SchedulingAlgo algo = new SJF();
-            Kernel kernel = new Kernel(algo);
-            Simulator sim = new Simulator(kernel, workload);
+        //SchedulingAlgo algo = new FCFS();
+        SchedulingAlgo algo = new SJF();
+        //SchedulingAlgo algo = new RR();
+        Kernel kernel = new Kernel(algo);
+        Simulator sim = new Simulator(kernel, workload);
 
-            sim.run();
+        sim.run();
 
-
+        System.out.println("Average waiting time: " + kernel.getAverageWaitingTime() + " ticks\n");
     }
 
 }

@@ -5,8 +5,6 @@ import java.util.List;
 
 public class SJF implements SchedulingAlgo {
 
-
-
     @Override
     public void addProcess(List<Process> readyQueue, Process p) {
         readyQueue.add(p);
@@ -14,7 +12,6 @@ public class SJF implements SchedulingAlgo {
 
     @Override
     public Process selectNextProcess(List<Process> readyQueue) {
-
         if (readyQueue.isEmpty()) {
             return null;
         }
@@ -37,8 +34,6 @@ public class SJF implements SchedulingAlgo {
             }
 
         }
-
-
         return readyQueue.remove(shortestIndex);
     }
 }
