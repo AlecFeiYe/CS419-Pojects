@@ -1,12 +1,15 @@
 
 package minios;
 
+
+
 import java.util.List;
 
 public class SJF implements SchedulingAlgo {
 
     @Override
     public void addProcess(List<Process> readyQueue, Process p) {
+
         readyQueue.add(p);
     }
 
@@ -17,23 +20,23 @@ public class SJF implements SchedulingAlgo {
         }
 
         int shortestIndex = 0;
-        int shortestDuration = readyQueue.get(0).getCurrentInstruction().duration;
+        int minDuration = Integer.MAX_VALUE;
 
-        for (int i = 1; i < readyQueue.size(); i++) {
+
+        for (int i = 0; i < readyQueue.size(); i++) {
             Process p = readyQueue.get(i);
             Instruction inst = p.getCurrentInstruction();
 
-
-            if (inst == null) {
-                continue;
+            if (inst != null) {
+                int remaining = inst.remainingTicks;
+                if (remaining < minDuration) {
+                    minDuration = remaining;
+                    shortestIndex = i;
+                }
             }
-
-            if (inst.duration < shortestDuration) {
-                shortestDuration = inst.duration;
-                shortestIndex = i;
-            }
-
         }
+
+
         return readyQueue.remove(shortestIndex);
     }
 }
