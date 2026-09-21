@@ -39,17 +39,30 @@ public class Simulator {
     }
 
     public static void main(String[] args) throws Exception {
-        List<Process> workload = TraceParser.parseWorkload("OS Projects/workload.txt");
+       
+        String filePath = "OS Projects/workload.txt";
 
-        //SchedulingAlgo algo = new FCFS();
-        //SchedulingAlgo algo = new SJF();
-        SchedulingAlgo algo = new RR();
-        Kernel kernel = new Kernel(algo);
-        Simulator sim = new Simulator(kernel, workload);
+        // 1. FCFS 
+        System.out.println("  Running FCFS  ");
+        List<Process> workloadFCFS = TraceParser.parseWorkload(filePath);
+        SchedulingAlgo algoFCFS = new FCFS();
+        Kernel kernelFCFS = new Kernel(algoFCFS);
+        Simulator simFCFS = new Simulator(kernelFCFS, workloadFCFS);
+        simFCFS.run();
 
-        sim.run();
+        // 2. SJF 
+        System.out.println("\n  Running SJF  ");
+        List<Process> workloadSJF = TraceParser.parseWorkload(filePath);
+        SchedulingAlgo algoSJF = new SJF();
+        Kernel kernelSJF = new Kernel(algoSJF);
+        Simulator simSJF = new Simulator(kernelSJF, workloadSJF);
+        simSJF.run();
 
-        System.out.println("Average waiting time: " + kernel.getAverageWaitingTime() + " ticks\n");
+        // 3. RR 
+        System.out.println("\n  Running RR  ");
+        List<Process> workloadRR = TraceParser.parseWorkload(filePath);
+        SchedulingAlgo algoRR = new RR();
+        Kernel kernelRR = new Kernel(algoRR);
+        Simulator simRR = new Simulator(kernelRR, workloadRR);
+        simRR.run();
     }
-
-}
