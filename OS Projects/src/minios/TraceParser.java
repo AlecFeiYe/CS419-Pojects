@@ -33,7 +33,7 @@ public class TraceParser {
                     String[] parts = line.split("\\s+");
                     currentPid = Integer.parseInt(parts[1]);
                     currentArrival = Integer.parseInt(parts[2]);
-                    requiredMemorySpace =Integer.parseInt(parts[3]);
+                    requiredMemorySpace = Integer.parseInt(parts[3]);
                 } else {
                     // initialize the instruction and add to the process's code block
                     String[] parts = line.split("\\s+");
