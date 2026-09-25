@@ -22,7 +22,7 @@ public class TraceParser {
                 // Blank line signifies the end of a process block
                 if (line.isEmpty()) {
                     if (currentPid != -1) {
-                        processes.add(new Process(currentPid, currentArrival, currentInstructions));
+                        processes.add(new Process(currentPid, currentArrival, currentInstructions, requiredMemorySpace));
                         currentPid = -1;
                         currentInstructions = new ArrayList<>(); // Reset for next process
                     }
