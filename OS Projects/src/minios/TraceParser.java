@@ -45,7 +45,7 @@ public class TraceParser {
 
             // Add the final process (in case the trace doesn't end with a blank line)
             if (currentPid != -1) {
-                processes.add(new Process(currentPid, currentArrival, currentInstructions,requiredMemorySpace));
+                processes.add(new Process(currentPid, currentArrival, currentInstructions, requiredMemorySpace));
             }
         }
         return processes;
