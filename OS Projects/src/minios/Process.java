@@ -8,6 +8,7 @@ public class Process {
 
     public final int pid;
     public final int arrivalTime;
+    public final int requiredMemorySpace;
 
     public State state = State.NEW;
     public final List<Instruction> code;
