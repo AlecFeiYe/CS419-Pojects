@@ -32,4 +32,7 @@ public class Process {
         return requiredMemorySpace;
     }
 
+    public State getState() {
+        return state;
+    }
 }
