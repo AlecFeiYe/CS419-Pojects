@@ -28,5 +28,8 @@ public class Process {
         }
     }
 
+    public int getRequiredMemorySpace() {
+        return requiredMemorySpace;
+    }
 
 }
