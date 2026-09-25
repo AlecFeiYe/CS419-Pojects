@@ -13,6 +13,7 @@ public class TraceParser {
             String line;
             int currentPid = -1;
             int currentArrival = -1;
+            int requiredMemorySpace = -1;
             List<Instruction> currentInstructions = new ArrayList<>();
 
             while ((line = br.readLine()) != null) {
