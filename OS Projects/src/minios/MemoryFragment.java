@@ -12,6 +12,6 @@ public class MemoryFragment {
     }
 
     public boolean isValid() {
-        return userProcess.getState() != Process.State.BLOCKED;
+ //       return userProcess.getState() != Process.State.BLOCKED;
     }
 }
