@@ -14,7 +14,7 @@ public class Process {
     public final List<Instruction> code;
     public int programCounter = 0;
 
-    public Process(int pid, int arrivalTime, List<Instruction> code) {
+    public Process(int pid, int arrivalTime, List<Instruction> code, int requiredMemorySpace) {
         this.pid = pid;
         this.arrivalTime = arrivalTime;
         this.code = new ArrayList<>(code);
