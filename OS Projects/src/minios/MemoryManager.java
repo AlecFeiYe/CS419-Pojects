@@ -9,19 +9,19 @@ public class MemoryManager {
         MemoryFreeList.add(new Node(0, limit));
     }
 
-    public boolean isEnoughMemorySpace(Process process) {
-        int requiredMemorySpace = process.getRequiredMemorySpace();
-        for (int i = 0; i < this.memorySpace; i++) {
-            int freeMemoryFragment = 0;
-            if (!this.memory[i]) {
-                for (int j = i + 1; j < this.memorySpace; j++) {
-                    if (!this.memory[j]) {
-                        freeMemoryFragment++;
-                        if (freeMemoryFragment >= requiredMemorySpace) {
-                            return true;
-                        }
-                    }
-                }
+    public boolean allocateMemory(Process process) {
+        int processLimit = process.getLimit();
+
+        for (Node node : MemoryFreeList) {
+            if (node.getLimit() > processLimit) {
+                process.setRelocation(node.getRelocation());
+                MemoryFreeList.remove(node);
+                MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getNodeEndPoint()));
+                return true;
+            } else if (node.getRelocation() == processLimit) {
+                process.setRelocation(node.getRelocation());
+                MemoryFreeList.remove(node);
+                return true;
             }
         }
         return false;
