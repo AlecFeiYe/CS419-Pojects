@@ -26,5 +26,9 @@ public class MemoryManager {
         return false;
     }
 
+    public void freeMemory(Process process) {
+        MemoryFreeList.add(new Node(process.getRelocation(), process.getRelocation() + process.getLimit()));
+        updateMemory();
+    }
 
 }
