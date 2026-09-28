@@ -1,8 +1,7 @@
 package minios;
 
 public class MemoryManager {
-    private final int memorySpace;
-    private final boolean memory[];
+    private final List<Node> MemoryFreeList;
 
     public MemoryManager(int limit) {
         MemoryFreeList = new LinkedList<Node>();
