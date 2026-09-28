@@ -4,9 +4,9 @@ public class MemoryManager {
     private final int memorySpace;
     private final boolean memory[];
 
-    public MemoryManager(int memorySpace) {
-        this.memorySpace = memorySpace;
-        memory = new boolean[memorySpace];
+    public MemoryManager(int limit) {
+        MemoryFreeList = new LinkedList<Node>();
+        MemoryFreeList.add(new Node(0, limit));
     }
 
     public boolean isEnoughMemorySpace(Process process) {
