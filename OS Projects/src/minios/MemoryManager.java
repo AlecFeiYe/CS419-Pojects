@@ -31,4 +31,21 @@ public class MemoryManager {
         updateMemory();
     }
 
+    private void updateMemory() {
+        MemoryFreeList.sort((a, b) -> a.getRelocation() - b.getRelocation());
+        
+        for(int i=0;i<MemoryFreeList.size()-1;){
+            Node a = MemoryFreeList.get(i);
+            Node b = MemoryFreeList.get(i+1);
+            if(a.getNodeEndPoint() == b.getRelocation()){
+                Node merge = new Node(a.getRelocation(), b.getNodeEndPoint());
+                MemoryFreeList.remove(i+1);
+                MemoryFreeList.set(i,merge);
+            }
+            else {
+                i++;
+            }
+
+        }
+    }
 }
