@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Kernel {
     private final SchedulingAlgo algo;
+    private final MemoryManager memoryManager;
     private final List<Process> readyQueue = new ArrayList<>();
     private final List<Process> waitQueue = new ArrayList<>();
     private Process runningProcess = null;
