@@ -1,4 +1,6 @@
 package minios;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MemoryManager {
     private final List<Node> MemoryFreeList;
@@ -33,7 +35,7 @@ public class MemoryManager {
 
     private void updateMemory() {
         MemoryFreeList.sort((a, b) -> a.getRelocation() - b.getRelocation());
-        
+
         for(int i=0;i<MemoryFreeList.size()-1;){
             Node a = MemoryFreeList.get(i);
             Node b = MemoryFreeList.get(i+1);
