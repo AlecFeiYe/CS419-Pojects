@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Process {
-    public enum State { NEW, READY, RUNNING, BLOCKED, TERMINATED }
+    public enum State {NEW, READY, RUNNING, BLOCKED, TERMINATED}
 
     public final int pid;
     public final int arrivalTime;
@@ -15,25 +15,31 @@ public class Process {
     public final List<Instruction> code;
     public int programCounter = 0;
 
-    public Process(int pid, int arrivalTime, List<Instruction> code, int requiredMemorySpace) {
+    public Process(int pid, int arrivalTime, List<Instruction> code, int limit) {
         this.pid = pid;
         this.arrivalTime = arrivalTime;
         this.code = new ArrayList<>(code);
+        this.limit = limit;
     }
 
     public Instruction getCurrentInstruction() {
-        if (programCounter < code.size()){
+        if (programCounter < code.size()) {
             return code.get(programCounter);
-        }else{
+        } else {
             return null;
         }
     }
 
-    public int getRequiredMemorySpace() {
-        return requiredMemorySpace;
+    public int getLimit() {
+        return limit;
     }
 
-    public State getState() {
-        return state;
+    public void setRelocation(int relocation) {
+        this.relocation = relocation;
     }
+
+    public int getRelocation() {
+        return relocation;
+    }
+
 }
