@@ -19,7 +19,21 @@ public class Kernel {
     public void admitProcess(Process p) {
         processCount++;
         p.state = Process.State.READY;
-        algo.addProcess(readyQueue, p);
+
+        for(Process waitForMemoryProcess : waitForMemoryQueue) {
+            if(memoryManager.allocateMemory(waitForMemoryProcess))
+            {
+                waitForMemoryQueue.remove(waitForMemoryProcess);
+            }
+        }
+
+        if(memoryManager.allocateMemory(p))
+        {
+            algo.addProcess(readyQueue, p);
+        }
+        else{
+            waitForMemoryQueue.add(p);
+        }
     }
 
     // Called on every clock tick
