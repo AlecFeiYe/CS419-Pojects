@@ -74,4 +74,4 @@ public class Simulator {
         System.out.println("SJF Average Waiting Time: " + kernelSJF.getAverageWaitingTime());
         System.out.println("RR Average Waiting Time: " + kernelRR.getAverageWaitingTime());
     }
-};
+}
