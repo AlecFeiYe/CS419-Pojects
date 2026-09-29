@@ -9,6 +9,7 @@ public class Kernel {
     private final MemoryManager memoryManager;
     private final List<Process> readyQueue = new ArrayList<>();
     private final List<Process> waitQueue = new ArrayList<>();
+    private final List<Process> waitForMemoryQueue = new ArrayList<>();
     private Process runningProcess = null;
     private long totalWaitingTime = 0;
     private int processCount = 0;
