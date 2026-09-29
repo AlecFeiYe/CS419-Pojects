@@ -41,6 +41,14 @@ public class Kernel {
 
     // Called on every clock tick
     public void onClockTick(int currentTime) {
+
+        for(Process waitForMemoryProcess : waitForMemoryQueue) {
+            if(memoryManager.allocateMemory(waitForMemoryProcess))
+            {
+                waitForMemoryQueue.remove(waitForMemoryProcess);
+            }
+        }
+        
         // check all processes currently waiting in I/O wait queue
         serviceWaitQueue(currentTime);
 
