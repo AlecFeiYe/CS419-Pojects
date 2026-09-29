@@ -18,7 +18,6 @@ public class MemoryManager {
                 process.setRelocation(node.getRelocation());
                 MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getLimit() -processLimit));
                 MemoryFreeList.remove(node);
-                MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getNodeEndPoint()));
                 return true;
             } else if (node.getLimit() == processLimit) {
                 process.setRelocation(node.getRelocation());
@@ -48,7 +47,10 @@ public class MemoryManager {
             else {
                 i++;
             }
-
         }
+    }
+    //only for test;
+    public List<Node> getMemoryFreeList() {
+        return MemoryFreeList;
     }
 }
