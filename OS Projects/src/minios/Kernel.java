@@ -26,6 +26,7 @@ public class Kernel {
         for(Process waitForMemoryProcess : waitForMemoryQueue) {
             if(memoryManager.allocateMemory(waitForMemoryProcess))
             {
+                algo.addProcess(readyQueue, waitForMemoryProcess);
                 waitForMemoryQueue.remove(waitForMemoryProcess);
             }
         }
@@ -45,10 +46,11 @@ public class Kernel {
         for(Process waitForMemoryProcess : waitForMemoryQueue) {
             if(memoryManager.allocateMemory(waitForMemoryProcess))
             {
+                algo.addProcess(readyQueue, waitForMemoryProcess);
                 waitForMemoryQueue.remove(waitForMemoryProcess);
             }
         }
-        
+
         // check all processes currently waiting in I/O wait queue
         serviceWaitQueue(currentTime);
 
