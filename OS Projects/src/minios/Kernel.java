@@ -43,6 +43,7 @@ public class Kernel {
 
             // Current process has finished.
             if (inst == null) {
+                memoryManager.freeMemory(runningProcess);
                 System.out.println("[Tick " + currentTime + "] Process " + runningProcess.pid + " Terminates.");
                 terminateProcess(runningProcess);
                 // In this case, no instruction is executed, so no CPU cycle
