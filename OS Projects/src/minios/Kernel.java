@@ -14,8 +14,9 @@ public class Kernel {
     private long totalWaitingTime = 0;
     private int processCount = 0;
 
-    public Kernel(SchedulingAlgo algo) {
+    public Kernel(SchedulingAlgo algo, int memorySize) {
         this.algo = algo;
+        this.memoryManager = new MemoryManager(memorySize);
     }
 
     public void admitProcess(Process p) {
