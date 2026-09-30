@@ -1,4 +1,6 @@
 package minios;
+
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +18,10 @@ public class MemoryManager {
         for (Node node : MemoryFreeList) {
             if (node.getLimit() > processLimit) {
                 process.setRelocation(node.getRelocation());
-                MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getLimit() -processLimit));
+
+                System.out.println("\nA new memory has been allocated to Process " + process.pid + ": [" + process.getRelocation() + "," + (process.getRelocation() + process.getLimit()) + "]");
+
+                MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getLimit() - processLimit));
                 MemoryFreeList.remove(node);
                 updateMemory();
                 FreeMemoryTrack();
@@ -36,12 +41,13 @@ public class MemoryManager {
         System.out.println("\nThe memory of Process " + process.pid + " has been released: [" + process.getRelocation() + "," + (process.getRelocation() + process.getLimit()) + "]");
         MemoryFreeList.add(new Node(process.getRelocation(), process.getLimit()));
         updateMemory();
+        FreeMemoryTrack();
     }
 
     private void updateMemory() {
         MemoryFreeList.sort(Comparator.comparingInt(Node::getRelocation));
 
-        for(int i=0;i<MemoryFreeList.size()-1;){
+        for (int i = 0; i < MemoryFreeList.size() - 1; ) {
             Node a = MemoryFreeList.get(i);
             Node b = MemoryFreeList.get(i + 1);
             if (a.getNodeEndPoint() == b.getRelocation()) {
@@ -53,8 +59,17 @@ public class MemoryManager {
             }
         }
     }
+
     //only for test;
     public List<Node> getMemoryFreeList() {
         return MemoryFreeList;
+    }
+
+    private void FreeMemoryTrack() {
+        System.out.print("Free Memory Track:");
+        for (Node n : MemoryFreeList) {
+            System.out.print("[" + n.getRelocation() + "," + n.getNodeEndPoint() + "] ");
+        }
+        System.out.println("\n");
     }
 }
