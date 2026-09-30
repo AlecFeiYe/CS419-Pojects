@@ -18,10 +18,14 @@ public class MemoryManager {
                 process.setRelocation(node.getRelocation());
                 MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getLimit() -processLimit));
                 MemoryFreeList.remove(node);
+                updateMemory();
+                FreeMemoryTrack();
                 return true;
             } else if (node.getLimit() == processLimit) {
                 process.setRelocation(node.getRelocation());
                 MemoryFreeList.remove(node);
+                updateMemory();
+                FreeMemoryTrack();
                 return true;
             }
         }
