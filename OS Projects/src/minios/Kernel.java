@@ -151,6 +151,7 @@ public class Kernel {
     }
 
     private void terminateProcess(Process p) {
+        memoryManager.freeMemory(p);
         p.state = Process.State.TERMINATED;
         runningProcess = null;
     }
