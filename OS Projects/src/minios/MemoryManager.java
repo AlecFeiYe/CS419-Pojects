@@ -34,7 +34,7 @@ public class MemoryManager {
     }
 
     private void updateMemory() {
-        MemoryFreeList.sort((a, b) -> a.getRelocation() - b.getRelocation());
+        MemoryFreeList.sort(Comparator.comparingInt(Node::getRelocation));
 
         for(int i=0;i<MemoryFreeList.size()-1;){
             Node a = MemoryFreeList.get(i);
