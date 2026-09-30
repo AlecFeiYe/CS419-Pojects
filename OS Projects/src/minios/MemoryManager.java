@@ -29,7 +29,8 @@ public class MemoryManager {
     }
 
     public void freeMemory(Process process) {
-        MemoryFreeList.add(new Node(process.getRelocation(), process.getRelocation() + process.getLimit()));
+        System.out.println("\nThe memory of Process " + process.pid + " has been released: [" + process.getRelocation() + "," + (process.getRelocation() + process.getLimit()) + "]");
+        MemoryFreeList.add(new Node(process.getRelocation(), process.getLimit()));
         updateMemory();
     }
 
@@ -38,13 +39,12 @@ public class MemoryManager {
 
         for(int i=0;i<MemoryFreeList.size()-1;){
             Node a = MemoryFreeList.get(i);
-            Node b = MemoryFreeList.get(i+1);
-            if(a.getNodeEndPoint() == b.getRelocation()){
-                Node merge = new Node(a.getRelocation(), b.getNodeEndPoint());
-                MemoryFreeList.remove(i+1);
-                MemoryFreeList.set(i,merge);
-            }
-            else {
+            Node b = MemoryFreeList.get(i + 1);
+            if (a.getNodeEndPoint() == b.getRelocation()) {
+                Node merge = new Node(a.getRelocation(), a.getLimit() + b.getLimit());
+                MemoryFreeList.remove(i + 1);
+                MemoryFreeList.set(i, merge);
+            } else {
                 i++;
             }
         }
