@@ -6,4 +6,6 @@ My answer for this question is: a memory space would be released only when the p
 
 Maybe it is not right. 
 
--[ ] I still have trouble to decide where and when to check the waitForMemoryQueue 
+- [x] I still have trouble to decide where and when to check the waitForMemoryQueue
+- [ ] Watch out! The calculating of average time isn't right now! Because there are some process wait in waitForMemoryQueue.
+- [ ] We still need to track who go to the waitqueue to make sure everything works well.
