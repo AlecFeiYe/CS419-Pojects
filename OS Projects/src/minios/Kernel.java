@@ -110,6 +110,7 @@ public class Kernel {
             }
         }
         totalWaitingTime += readyQueue.size();
+        totalWaitingTime += waitForMemoryQueue.size();
     }
 
     private void serviceWaitQueue(int currentTime) {
