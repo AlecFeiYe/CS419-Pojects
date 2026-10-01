@@ -23,12 +23,7 @@ public class Kernel {
         processCount++;
         p.state = Process.State.READY;
 
-        for (Process waitForMemoryProcess : waitForMemoryQueue) {
-            if (memoryManager.allocateMemory(waitForMemoryProcess)) {
-                algo.addProcess(readyQueue, waitForMemoryProcess);
-                waitForMemoryQueue.remove(waitForMemoryProcess);
-            }
-        }
+        checkWaitForMemoryQueue();
 
         if (memoryManager.allocateMemory(p)) {
             algo.addProcess(readyQueue, p);
