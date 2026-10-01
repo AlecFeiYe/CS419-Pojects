@@ -137,15 +137,7 @@ public class Kernel {
         memoryManager.freeMemory(p);
         p.state = Process.State.TERMINATED;
         runningProcess = null;
-
-        Iterator<Process> it = waitForMemoryQueue.iterator();
-        while (it.hasNext()) {
-            Process p2 = it.next();
-            if (memoryManager.allocateMemory(p2)) {
-                algo.addProcess(readyQueue, p2);
-                it.remove();
-            }
-        }
+        checkWaitForMemoryQueue();
     }
 
     private Process dispatchNextProcess(int currentTime) {
