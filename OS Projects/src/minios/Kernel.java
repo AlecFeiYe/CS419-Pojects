@@ -28,6 +28,7 @@ public class Kernel {
         if (memoryManager.allocateMemory(p)) {
             algo.addProcess(readyQueue, p);
         } else {
+            System.out.println("Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
             waitForMemoryQueue.add(p);
         }
     }
