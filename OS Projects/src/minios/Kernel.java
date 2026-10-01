@@ -164,4 +164,17 @@ public class Kernel {
         }
         return 1.0 * totalWaitingTime / processCount;
     }
+
+    public void checkWaitForMemoryQueue() {
+        Iterator<Process> it = waitForMemoryQueue.iterator();
+        while (it.hasNext()) {
+            Process p = it.next();
+            if (memoryManager.allocateMemory(p)) {
+                System.out.println("Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
+                algo.addProcess(readyQueue, p);
+                it.remove();
+            }
+        }
+
+    }
 }
