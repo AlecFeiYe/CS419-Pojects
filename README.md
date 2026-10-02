@@ -1,5 +1,5 @@
 # CS419-Pojects
-## No matter who watch this:
+## Development log and Blueprint:
 I have a question about if a process was allocated memory. So it keeps there util it finished? Or only when it is running it has the memory space.
 
 My answer for this question is: a memory space would be released only when the process is finished.
