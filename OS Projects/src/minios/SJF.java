@@ -39,4 +39,9 @@ public class SJF implements SchedulingAlgo {
 
         return readyQueue.remove(shortestIndex);
     }
+
+    @Override
+    public String getName(){
+        return "RR";
+    }
 }

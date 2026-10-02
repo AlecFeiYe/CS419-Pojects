@@ -21,6 +21,11 @@ public class RR implements SchedulingAlgo {
         }
     }
 
+    @Override
+    public String getName(){
+        return "RR";
+    }
+
     public void onCpuTick() {
         timeUsed++;
     }
