@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Kernel {
     private final SchedulingAlgo algo;
-    private final MemoryManager memoryManager;
+    private final MemoryManagement memoryManager;
     private final List<Process> readyQueue = new ArrayList<>();
     private final List<Process> waitQueue = new ArrayList<>();
     private final List<Process> waitForMemoryQueue = new ArrayList<>();
@@ -14,9 +14,9 @@ public class Kernel {
     private long totalWaitingTime = 0;
     private int processCount = 0;
 
-    public Kernel(SchedulingAlgo algo, int memorySize) {
+    public Kernel(SchedulingAlgo algo, MemoryManagement memoryManager) {
         this.algo = algo;
-        this.memoryManager = new MemoryManager(memorySize);
+        this.memoryManager = memoryManager;
     }
 
     public void admitProcess(Process p) {
@@ -25,7 +25,7 @@ public class Kernel {
 
         checkWaitForMemoryQueue();
 
-        if (memoryManager.allocateMemory(p)) {
+        if (memoryManager.allocate(p)) {
             algo.addProcess(readyQueue, p);
         } else {
             System.out.println("Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
@@ -135,7 +135,7 @@ public class Kernel {
     }
 
     private void terminateProcess(Process p) {
-        memoryManager.freeMemory(p);
+        memoryManager.release(p);
         p.state = Process.State.TERMINATED;
         runningProcess = null;
         checkWaitForMemoryQueue();
@@ -170,7 +170,7 @@ public class Kernel {
         Iterator<Process> it = waitForMemoryQueue.iterator();
         while (it.hasNext()) {
             Process p = it.next();
-            if (memoryManager.allocateMemory(p)) {
+            if (memoryManager.allocate(p)) {
                 System.out.println("Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
                 algo.addProcess(readyQueue, p);
                 it.remove();
