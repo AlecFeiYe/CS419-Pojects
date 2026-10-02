@@ -9,7 +9,7 @@ public class Kernel {
     private final MemoryManagement memoryManager;
     private final List<Process> readyQueue = new ArrayList<>();
     private final List<Process> waitQueue = new ArrayList<>();
-    private final List<Process> waitForMemoryQueue = new ArrayList<>();
+    private final List<Process> memoryQueue = new ArrayList<>();
     private Process runningProcess = null;
     private long totalWaitingTime = 0;
     private int processCount = 0;
@@ -29,7 +29,7 @@ public class Kernel {
             algo.addProcess(readyQueue, p);
         } else {
             System.out.println("Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
-            waitForMemoryQueue.add(p);
+            memoryQueue.add(p);
         }
     }
 
@@ -110,7 +110,7 @@ public class Kernel {
             }
         }
         totalWaitingTime += readyQueue.size();
-        totalWaitingTime += waitForMemoryQueue.size();
+        totalWaitingTime += memoryQueue.size();
     }
 
     private void serviceWaitQueue(int currentTime) {
@@ -167,7 +167,7 @@ public class Kernel {
     }
 
     public void checkWaitForMemoryQueue() {
-        Iterator<Process> it = waitForMemoryQueue.iterator();
+        Iterator<Process> it = memoryQueue.iterator();
         while (it.hasNext()) {
             Process p = it.next();
             if (memoryManager.allocate(p)) {
