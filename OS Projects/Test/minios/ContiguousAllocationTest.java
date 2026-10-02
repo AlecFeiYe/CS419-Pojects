@@ -7,12 +7,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MemoryManagerTest {
+public class ContiguousAllocationTest {
 
     @Test
     public void testAllocationWithEnoughMemory() {
 
-        MemoryManager manager = new MemoryManager(100);
+        ContiguousAllocation manager = new ContiguousAllocation(100);
         List<Instruction> list = new ArrayList<>();
         List<Node> nodes = manager.getMemoryFreeList();
 
@@ -21,7 +21,7 @@ public class MemoryManagerTest {
         assertEquals(0, nodes.get(0).getRelocation());
         assertEquals(100, nodes.get(0).getNodeEndPoint());
 
-        assertTrue(manager.allocateMemory(p));
+        assertTrue(manager.allocate(p));
 
         assertEquals(1, nodes.size());
         assertEquals(10, nodes.get(0).getRelocation());
@@ -29,7 +29,7 @@ public class MemoryManagerTest {
 
         Process p2 = new Process(1, 0, list, 50);
 
-        assertTrue(manager.allocateMemory(p2));
+        assertTrue(manager.allocate(p2));
         assertEquals(1, nodes.size());
         assertEquals(60, nodes.get(0).getRelocation());
         assertEquals(100, nodes.get(0).getNodeEndPoint());
@@ -38,28 +38,28 @@ public class MemoryManagerTest {
     @Test
     public void testAllocationWithoutEnoughMemory() {
 
-        MemoryManager manager = new MemoryManager(100);
+        ContiguousAllocation manager = new ContiguousAllocation(100);
         List<Instruction> list = new ArrayList<>();
         List<Node> nodes = manager.getMemoryFreeList();
 
         Process p = new Process(1, 0, list, 110);
 
-        assertFalse(manager.allocateMemory(p));
+        assertFalse(manager.allocate(p));
 
     }
 
     @Test
-    public void testFreeMemoryWithWantedMemory() {
+    public void testReleasingWithWantedMemory() {
 
-        MemoryManager manager = new MemoryManager(100);
+        ContiguousAllocation manager = new ContiguousAllocation(100);
         List<Instruction> list = new ArrayList<>();
         List<Node> nodes = manager.getMemoryFreeList();
 
         Process p = new Process(1, 0, list, 10);
 
-        assertTrue(manager.allocateMemory(p));
+        assertTrue(manager.allocate(p));
 
-        manager.freeMemory(p);
+        manager.release(p);
 
         assertEquals(1, nodes.size());
         assertEquals(0, nodes.get(0).getRelocation());
