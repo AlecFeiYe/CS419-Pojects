@@ -42,14 +42,19 @@ public class Simulator {
 
         String filePath = "OS Projects/workload.txt";
 
-        // 1. FCFS 
-        System.out.println("----------  Running FCFS  ----------\n");
-        List<Process> workloadFCFS = TraceParser.parseWorkload(filePath);
-        SchedulingAlgo algoFCFS = new FCFS();
-        Kernel kernelFCFS = new Kernel(algoFCFS, 100);
-        Simulator simFCFS = new Simulator(kernelFCFS, workloadFCFS);
-        simFCFS.run();
-        System.out.println("Average Waiting Time: " + kernelFCFS.getAverageWaitingTime() + "\n");
+        List<SchedulingAlgo> algoList = new ArrayList<>();
+        algoList.add(new FCFS());
+        algoList.add(new SJF());
+        algoList.add(new RR());
+
+        List<MemoryManagement> memoryManagementList = new ArrayList<>();
+        memoryManagementList.add(new ContiguousAllocation(100));
+        memoryManagementList.add(new PagedAllocation(100));
+
+        List<String> averageWaitTimeList = new ArrayList<>();
+
+        for (SchedulingAlgo algo : algoList) {
+            for (MemoryManagement memoryManagement : memoryManagementList) {
 
         // 2. SJF 
         System.out.println("----------  Running SJF  ----------\n");
