@@ -56,23 +56,17 @@ public class Simulator {
         for (SchedulingAlgo algo : algoList) {
             for (MemoryManagement memoryManagement : memoryManagementList) {
 
-        // 2. SJF 
-        System.out.println("----------  Running SJF  ----------\n");
-        List<Process> workloadSJF = TraceParser.parseWorkload(filePath);
-        SchedulingAlgo algoSJF = new SJF();
-        Kernel kernelSJF = new Kernel(algoSJF, 100);
-        Simulator simSJF = new Simulator(kernelSJF, workloadSJF);
-        simSJF.run();
-        System.out.println("Average Waiting Time: " + kernelSJF.getAverageWaitingTime() + "\n");
+                System.out.println("Running Algorithm: " + algo.getName() + "\nUsing Memory Manager: " + memoryManagement.getName());
 
-        // 3. RR 
-        System.out.println("----------  Running RR  ----------\n");
-        List<Process> workloadRR = TraceParser.parseWorkload(filePath);
-        SchedulingAlgo algoRR = new RR();
-        Kernel kernelRR = new Kernel(algoRR, 100);
-        Simulator simRR = new Simulator(kernelRR, workloadRR);
-        simRR.run();
-        System.out.println("Average Waiting Time: " + kernelRR.getAverageWaitingTime() + "\n");
+                List<Process> workload = TraceParser.parseWorkload(filePath);
+                Kernel kernel = new Kernel(algo, memoryManagement);
+                Simulator sim = new Simulator(kernel, workload);
+                sim.run();
+                averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Waiting Time: " + kernel.getAverageWaitingTime());
+                System.out.println("Average Waiting Time: " + kernel.getAverageWaitingTime() + "\n");
+
+            }
+        }
 
         System.out.println("----------  Conclusion and Comparing  ----------\n");
         System.out.println("FCFS Average Waiting Time: " + kernelFCFS.getAverageWaitingTime());
