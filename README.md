@@ -22,3 +22,13 @@ Now there are some new tasks.
   - etc.
 - [ ] ContiguousAllocation (class): implements MemoryManagement
 - [ ] PagedAllocation (class): implements MemoryManagement
+- [ ] When a process arrives, before it can be admitted, the kernel must check if the
+  process fits in memory. If not, the process must be placed in the memoryQueue (its
+  state remains “NEW”)
+- [ ] When a process terminates and its memory is released and potentially coalesced,
+  the kernel must scan the memoryQueue to see if one or more processes on the
+  queue can now be admitted.
+- [ ] A process now has three additional fields:
+  - int size (this is needed by both allocation schemes)
+  - int baseAddress (this is only needed by contiguous allocation)
+  - int[] pageTable (this is only needed by paged allocation)
