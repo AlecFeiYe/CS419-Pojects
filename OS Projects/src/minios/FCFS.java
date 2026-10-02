@@ -19,4 +19,9 @@ public class FCFS implements SchedulingAlgo {
             return readyQueue.remove(0);
         }
     }
+
+    @Override
+    public String getName(){
+        return "FCFS";
+    }
 }
