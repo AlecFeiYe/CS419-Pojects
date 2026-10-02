@@ -69,8 +69,8 @@ public class Simulator {
         }
 
         System.out.println("----------  Conclusion and Comparing  ----------\n");
-        System.out.println("FCFS Average Waiting Time: " + kernelFCFS.getAverageWaitingTime());
-        System.out.println("SJF Average Waiting Time: " + kernelSJF.getAverageWaitingTime());
-        System.out.println("RR Average Waiting Time: " + kernelRR.getAverageWaitingTime());
+        for (String messages : averageWaitTimeList) {
+            System.out.println(messages);
+        }
     }
 }
