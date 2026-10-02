@@ -72,4 +72,9 @@ public class MemoryManager {
         }
         System.out.println("\n");
     }
+
+    @Override
+    public String getName() {
+        return "Contiguous Allocation";
+    }
 }
