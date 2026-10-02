@@ -4,15 +4,16 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MemoryManager {
+public class ContiguousAllocation implements MemoryManagement {
     private final List<Node> MemoryFreeList;
 
-    public MemoryManager(int limit) {
+    public ContiguousAllocation(int limit) {
         MemoryFreeList = new LinkedList<Node>();
         MemoryFreeList.add(new Node(0, limit));
     }
 
-    public boolean allocateMemory(Process process) {
+    @Override
+    public boolean allocate(Process process) {
         int processLimit = process.getLimit();
 
         for (Node node : MemoryFreeList) {
@@ -37,7 +38,8 @@ public class MemoryManager {
         return false;
     }
 
-    public void freeMemory(Process process) {
+    @Override
+    public void release(Process process) {
         System.out.println("\nThe memory of Process " + process.pid + " has been released: [" + process.getRelocation() + "," + (process.getRelocation() + process.getLimit()) + "]");
         MemoryFreeList.add(new Node(process.getRelocation(), process.getLimit()));
         updateMemory();
