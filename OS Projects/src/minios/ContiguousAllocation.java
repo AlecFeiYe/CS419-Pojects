@@ -14,13 +14,13 @@ public class ContiguousAllocation implements MemoryManagement {
 
     @Override
     public boolean allocate(Process process) {
-        int processLimit = process.getLimit();
+        int processLimit = process.getSize();
 
         for (Node node : MemoryFreeList) {
             if (node.getLimit() > processLimit) {
-                process.setRelocation(node.getRelocation());
+                process.setBaseAddress(node.getRelocation());
 
-                System.out.println("\nA new memory has been allocated to Process " + process.pid + ": [" + process.getRelocation() + "," + (process.getRelocation() + process.getLimit()) + "]");
+                System.out.println("\nA new memory has been allocated to Process " + process.pid + ": [" + process.getBaseAddress() + "," + (process.getBaseAddress() + process.getSize()) + "]");
 
                 MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getLimit() - processLimit));
                 MemoryFreeList.remove(node);
@@ -28,7 +28,7 @@ public class ContiguousAllocation implements MemoryManagement {
                 FreeMemoryTrack();
                 return true;
             } else if (node.getLimit() == processLimit) {
-                process.setRelocation(node.getRelocation());
+                process.setBaseAddress(node.getRelocation());
                 MemoryFreeList.remove(node);
                 updateMemory();
                 FreeMemoryTrack();
@@ -40,8 +40,8 @@ public class ContiguousAllocation implements MemoryManagement {
 
     @Override
     public void release(Process process) {
-        System.out.println("\nThe memory of Process " + process.pid + " has been released: [" + process.getRelocation() + "," + (process.getRelocation() + process.getLimit()) + "]");
-        MemoryFreeList.add(new Node(process.getRelocation(), process.getLimit()));
+        System.out.println("\nThe memory of Process " + process.pid + " has been released: [" + process.getBaseAddress() + "," + (process.getBaseAddress() + process.getSize()) + "]");
+        MemoryFreeList.add(new Node(process.getBaseAddress(), process.getSize()));
         updateMemory();
         FreeMemoryTrack();
     }
