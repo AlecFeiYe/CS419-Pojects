@@ -43,4 +43,15 @@ public class Process {
         return relocation;
     }
 
+    public int[] getPageTable() {
+        return pageTable;
+    }
+
+    public void setPageTable(int[] pageTable) {
+        this.pageTable = pageTable;
+    }
+
+    public void modifyPageTable(int index, int value) {
+        this.pageTable[index] = value;
+    }
 }
