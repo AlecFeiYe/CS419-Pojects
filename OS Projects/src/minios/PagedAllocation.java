@@ -22,8 +22,12 @@ public class PagedAllocation implements MemoryManagement {
     }
 
     @Override
-    public void release(Process p)
-    {
+    public void release(Process p) {
+        int[] tempPage = p.getPageTable();
+        for (int i = 0; i < tempPage.length; i++) {
+            framesArray[tempPage[i]] = false;
+            p.modifyPageTable(i, -1);
+        }
 
     }
 
