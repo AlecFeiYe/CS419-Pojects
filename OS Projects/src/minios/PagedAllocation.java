@@ -3,7 +3,10 @@ package minios;
 import java.util.LinkedList;
 
 public class PagedAllocation implements MemoryManagement {
-    public PagedAllocation(int limit) {
+    private int size;
+    private int frameSize;
+    private int numberOfFrames;
+    private boolean[] framesArray;
 
     }
 
