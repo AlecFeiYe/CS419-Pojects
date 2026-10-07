@@ -8,8 +8,9 @@ public class Process {
 
     public final int pid;
     public final int arrivalTime;
-    private int relocation = -1;
-    private final int limit;
+    private int baseAddress = -1;
+    private final int size;
+    private int[] pageTable;
 
     public State state = State.NEW;
     public final List<Instruction> code;
