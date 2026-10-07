@@ -50,7 +50,7 @@ public class Simulator {
 
         List<MemoryManagement> memoryManagementList = new ArrayList<>();
         memoryManagementList.add(new ContiguousAllocation(100));
-        memoryManagementList.add(new PagedAllocation(100));
+        memoryManagementList.add(new PagedAllocation(100,4));
 
         List<String> averageWaitTimeList = new ArrayList<>();
 
