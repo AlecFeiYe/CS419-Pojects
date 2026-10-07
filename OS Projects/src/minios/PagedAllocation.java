@@ -1,7 +1,5 @@
 package minios;
 
-import java.util.LinkedList;
-
 public class PagedAllocation implements MemoryManagement {
     private int size;
     private int frameSize;
@@ -16,9 +14,27 @@ public class PagedAllocation implements MemoryManagement {
     }
 
     @Override
-    public boolean allocate(Process p)
-    {
-        return true;
+    public boolean allocate(Process p) {
+        int neededFrames = (p.getSize() - 1) / frameSize + 1;
+        p.setPageTable(neededFrames);
+        int countOfFreeFrames = 0;
+        for (boolean i : framesArray) {
+            if (!i) {
+                countOfFreeFrames++;
+            }
+        }
+        int restOfNeededFrames = neededFrames;
+        if (countOfFreeFrames >= neededFrames) {
+            for (int i = 0; i < numberOfFrames && restOfNeededFrames > 0; i++) {
+                if (!framesArray[i]) {
+                    restOfNeededFrames--;
+                    p.modifyPageTable(neededFrames - restOfNeededFrames, i);
+                    framesArray[i] = true;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
