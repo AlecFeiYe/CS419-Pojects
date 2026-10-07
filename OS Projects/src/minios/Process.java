@@ -16,11 +16,11 @@ public class Process {
     public final List<Instruction> code;
     public int programCounter = 0;
 
-    public Process(int pid, int arrivalTime, List<Instruction> code, int limit) {
+    public Process(int pid, int arrivalTime, List<Instruction> code, int size) {
         this.pid = pid;
         this.arrivalTime = arrivalTime;
         this.code = new ArrayList<>(code);
-        this.limit = limit;
+        this.size = size;
     }
 
     public Instruction getCurrentInstruction() {
@@ -31,16 +31,16 @@ public class Process {
         }
     }
 
-    public int getLimit() {
-        return limit;
+    public int getSize() {
+        return size;
     }
 
-    public void setRelocation(int relocation) {
-        this.relocation = relocation;
+    public void setBaseAddress(int relocation) {
+        this.baseAddress = relocation;
     }
 
-    public int getRelocation() {
-        return relocation;
+    public int getBaseAddress() {
+        return baseAddress;
     }
 
     public int[] getPageTable() {
