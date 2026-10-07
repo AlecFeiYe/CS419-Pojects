@@ -15,20 +15,21 @@ Maybe it is not right.
 My previous code was written before Project 3 was officially posted on canvas. 
 Now there are some new tasks.
 
-- [ ] MemoryManagement (interface): declares common methods that are used by both
+- [x] MemoryManagement (interface): declares common methods that are used by both
   - allocation schemes, including:
   - allocate (Process p);
   - release (Process p);
   - etc.
-- [ ] ContiguousAllocation (class): implements MemoryManagement
-- [ ] PagedAllocation (class): implements MemoryManagement
+- [x] ContiguousAllocation (class): implements MemoryManagement
+- [x] PagedAllocation (class): implements MemoryManagement
 - [ ] When a process arrives, before it can be admitted, the kernel must check if the
   process fits in memory. If not, the process must be placed in the memoryQueue (its
   state remains “NEW”)
 - [ ] When a process terminates and its memory is released and potentially coalesced,
   the kernel must scan the memoryQueue to see if one or more processes on the
   queue can now be admitted.
-- [ ] A process now has three additional fields:
+- [x] A process now has three additional fields:
   - int size (this is needed by both allocation schemes)
   - int baseAddress (this is only needed by contiguous allocation)
   - int[] pageTable (this is only needed by paged allocation)
+- [ ] Watch out the process state and admit.
