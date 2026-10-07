@@ -8,6 +8,18 @@ public class PagedAllocation implements MemoryManagement {
     }
 
     @Override
+    public boolean allocate(Process p)
+    {
+        return true;
+    }
+
+    @Override
+    public void release(Process p)
+    {
+
+    }
+
+    @Override
     public String getName() {
         return "Paged Allocation";
     }
