@@ -47,8 +47,8 @@ public class Process {
         return pageTable;
     }
 
-    public void setPageTable(int[] pageTable) {
-        this.pageTable = pageTable;
+    public void setPageTable(int neededFrames) {
+        this.pageTable = new int[neededFrames];
     }
 
     public void modifyPageTable(int index, int value) {
