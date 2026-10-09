@@ -27,9 +27,9 @@ public class PagedAllocation implements MemoryManagement {
         if (countOfFreeFrames >= neededFrames) {
             for (int i = 0; i < numberOfFrames && restOfNeededFrames > 0; i++) {
                 if (!framesArray[i]) {
-                    restOfNeededFrames--;
                     p.modifyPageTable(neededFrames - restOfNeededFrames, i);
                     framesArray[i] = true;
+                    restOfNeededFrames--;
                 }
             }
             return true;
