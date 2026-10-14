@@ -21,14 +21,13 @@ public class Kernel {
 
     public void admitProcess(Process p) {
         processCount++;
-        p.state = Process.State.READY;
-
-        checkWaitForMemoryQueue();
 
         if (memoryManager.allocate(p)) {
+            p.state = Process.State.READY;
             algo.addProcess(readyQueue, p);
         } else {
-            System.out.println("Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
+            System.out.println("Not enough memory. Process " + p.pid + " added to memoryQueue.");
+            p.state = Process.State.NEW;
             memoryQueue.add(p);
         }
     }
@@ -156,7 +155,8 @@ public class Kernel {
     public boolean isIdle() {
         return runningProcess == null &&
                 readyQueue.isEmpty() &&
-                waitQueue.isEmpty();
+                waitQueue.isEmpty() &&
+                memoryQueue.isEmpty();
     }
 
     public double getAverageWaitingTime() {
@@ -172,6 +172,7 @@ public class Kernel {
             Process p = it.next();
             if (memoryManager.allocate(p)) {
                 System.out.println("Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
+                p.state = Process.State.READY;
                 algo.addProcess(readyQueue, p);
                 it.remove();
             }

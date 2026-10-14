@@ -10,31 +10,38 @@ public class PagedAllocation implements MemoryManagement {
         this.size = size;
         this.frameSize = frameSize;
         this.numberOfFrames = size / frameSize;
-        this.framesArray = new boolean[frameSize];
+        this.framesArray = new boolean[numberOfFrames];
     }
 
     @Override
     public boolean allocate(Process p) {
-        int neededFrames = (p.getSize() - 1) / frameSize + 1;
+        int neededFrames = (p.getSize() + frameSize - 1) / frameSize;
+
+        int freeFrames = 0;
+
+        for (boolean used : framesArray) {
+            if (!used) {
+                freeFrames++;
+            }
+        }
+
+        if (freeFrames < neededFrames) {
+            return false;
+        }
+
         p.setPageTable(neededFrames);
-        int countOfFreeFrames = 0;
-        for (boolean i : framesArray) {
-            if (!i) {
-                countOfFreeFrames++;
+
+        int pageIndex = 0;
+
+        for (int i = 0; i < framesArray.length && pageIndex < neededFrames; i++) {
+            if (!framesArray[i]) {
+                framesArray[i] = true;
+                p.modifyPageTable(pageIndex, i);
+                pageIndex++;
             }
         }
-        int restOfNeededFrames = neededFrames;
-        if (countOfFreeFrames >= neededFrames) {
-            for (int i = 0; i < numberOfFrames && restOfNeededFrames > 0; i++) {
-                if (!framesArray[i]) {
-                    restOfNeededFrames--;
-                    p.modifyPageTable(neededFrames - restOfNeededFrames, i);
-                    framesArray[i] = true;
-                }
-            }
-            return true;
-        }
-        return false;
+
+        return true;
     }
 
     @Override

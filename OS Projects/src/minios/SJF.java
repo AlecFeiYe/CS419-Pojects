@@ -42,6 +42,6 @@ public class SJF implements SchedulingAlgo {
 
     @Override
     public String getName(){
-        return "RR";
+        return "SJF";
     }
 }
