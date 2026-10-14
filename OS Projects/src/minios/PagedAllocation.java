@@ -10,7 +10,7 @@ public class PagedAllocation implements MemoryManagement {
         this.size = size;
         this.frameSize = frameSize;
         this.numberOfFrames = this.size / frameSize;
-        this.framesArray = new boolean[frameSize];
+        this.framesArray = new boolean[numberOfFrames];
     }
 
     @Override
