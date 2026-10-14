@@ -32,8 +32,10 @@ public class PagedAllocation implements MemoryManagement {
                     restOfNeededFrames--;
                 }
             }
+            memoryTracker();
             return true;
         }
+        memoryTracker();
         return false;
     }
 
@@ -44,10 +46,22 @@ public class PagedAllocation implements MemoryManagement {
             framesArray[tempPage[i]] = false;
             p.modifyPageTable(i, -1);
         }
+        memoryTracker();
     }
 
     @Override
     public String getName() {
         return "Paged Allocation";
+    }
+
+    public void memoryTracker() {
+        for (boolean i : this.framesArray) {
+            if (i) {
+                System.out.print("1 ");
+            } else {
+                System.out.print("0 ");
+            }
+        }
+        System.out.println();
     }
 }
