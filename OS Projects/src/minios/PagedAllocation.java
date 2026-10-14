@@ -1,15 +1,15 @@
 package minios;
 
 public class PagedAllocation implements MemoryManagement {
-    private int size;
-    private int frameSize;
-    private int numberOfFrames;
+    private final int size;
+    private final int frameSize;
+    private final int numberOfFrames;
     private boolean[] framesArray;
 
     public PagedAllocation(int size, int frameSize) {
         this.size = size;
         this.frameSize = frameSize;
-        this.numberOfFrames = size / frameSize;
+        this.numberOfFrames = this.size / frameSize;
         this.framesArray = new boolean[frameSize];
     }
 
@@ -44,7 +44,6 @@ public class PagedAllocation implements MemoryManagement {
             framesArray[tempPage[i]] = false;
             p.modifyPageTable(i, -1);
         }
-
     }
 
     @Override
