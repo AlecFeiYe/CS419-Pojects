@@ -21,11 +21,10 @@ public class Kernel {
 
     public void admitProcess(Process p) {
         processCount++;
-        p.state = Process.State.READY;
-
         checkWaitForMemoryQueue();
 
         if (memoryManager.allocate(p)) {
+            p.state = Process.State.READY;
             algo.addProcess(readyQueue, p);
         } else {
             System.out.println("Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
@@ -172,6 +171,7 @@ public class Kernel {
             Process p = it.next();
             if (memoryManager.allocate(p)) {
                 System.out.println("Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
+                p.state = Process.State.READY;
                 algo.addProcess(readyQueue, p);
                 it.remove();
             }
