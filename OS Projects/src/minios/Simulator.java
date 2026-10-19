@@ -41,32 +41,26 @@ public class Simulator {
 
     public static void main(String[] args) throws Exception {
 
-        String filePath = "OS Projects/workload.txt";
+        String filePath = "OS Projects/workload1.txt";
 
-        List<SchedulingAlgo> algoList = new ArrayList<>();
-        algoList.add(new FCFS());
-        algoList.add(new SJF());
-        algoList.add(new RR());
+        SchedulingAlgo algo = new FCFS();
 
         List<MemoryManagement> memoryManagementList = new ArrayList<>();
-        memoryManagementList.add(new ContiguousAllocation(100));
-        memoryManagementList.add(new PagedAllocation(100,4));
+        memoryManagementList.add(new ContiguousAllocation(120));
+        memoryManagementList.add(new PagedAllocation(120, 10));
 
         List<String> averageWaitTimeList = new ArrayList<>();
 
-        for (SchedulingAlgo algo : algoList) {
-            for (MemoryManagement memoryManagement : memoryManagementList) {
+        for (MemoryManagement memoryManagement : memoryManagementList) {
 
-                System.out.println("Running Algorithm: " + algo.getName() + "\nUsing Memory Manager: " + memoryManagement.getName());
+            System.out.println("Running Algorithm: " + algo.getName() + "\nUsing Memory Manager: " + memoryManagement.getName());
 
-                List<Process> workload = TraceParser.parseWorkload(filePath);
-                Kernel kernel = new Kernel(algo, memoryManagement);
-                Simulator sim = new Simulator(kernel, workload);
-                sim.run();
-                averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Waiting Time: " + kernel.getAverageWaitingTime());
-                System.out.println("Average Waiting Time: " + kernel.getAverageWaitingTime() + "\n");
-
-            }
+            List<Process> workload = TraceParser.parseWorkload(filePath);
+            Kernel kernel = new Kernel(algo, memoryManagement);
+            Simulator sim = new Simulator(kernel, workload);
+            sim.run();
+            averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Waiting Time: " + kernel.getAverageWaitingTime());
+            System.out.println("Average Waiting Time: " + kernel.getAverageWaitingTime() + "\n");
         }
 
         System.out.println("----------  Conclusion and Comparing  ----------\n");
