@@ -24,8 +24,8 @@ public class Simulator {
             while (it.hasNext()) {
                 Process p = it.next();
                 if (p.arrivalTime == clock) {
-                    System.out.println("[Tick " + clock + "] Process " + p.pid + " arrives.");
-                    kernel.admitProcess(p);
+                    System.out.print("[Tick " + clock + "] Process " + p.pid + " arrives. Require memory size: " + p.getSize());
+                    kernel.admitProcess(p, clock);
                     it.remove();
                 }
             }
@@ -59,8 +59,9 @@ public class Simulator {
             Kernel kernel = new Kernel(algo, memoryManagement);
             Simulator sim = new Simulator(kernel, workload);
             sim.run();
-            averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Waiting Time: " + kernel.getAverageWaitingTime());
-            System.out.println("Average Waiting Time: " + kernel.getAverageWaitingTime() + "\n");
+            averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n" + "Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime());
+            System.out.println("Average Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n");
+            System.out.println("Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime() + "\n");
         }
 
         System.out.println("----------  Conclusion and Comparing  ----------\n");
