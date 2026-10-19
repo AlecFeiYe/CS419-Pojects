@@ -11,7 +11,8 @@ public class Kernel {
     private final List<Process> waitQueue = new ArrayList<>();
     private final List<Process> memoryQueue = new ArrayList<>();
     private Process runningProcess = null;
-    private long totalWaitingTime = 0;
+    private long readyQueueWaitingTime = 0;
+    private long memoryQueueWaitingTime = 0;
     private int processCount = 0;
 
     public Kernel(SchedulingAlgo algo, MemoryManagement memoryManager) {
@@ -19,15 +20,14 @@ public class Kernel {
         this.memoryManager = memoryManager;
     }
 
-    public void admitProcess(Process p) {
+    public void admitProcess(Process p, int clock) {
         processCount++;
         checkWaitForMemoryQueue();
-
         if (memoryManager.allocate(p)) {
             p.state = Process.State.READY;
             algo.addProcess(readyQueue, p);
         } else {
-            System.out.println("Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
+            System.out.println("\n[Tick " + clock + "] Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
             memoryQueue.add(p);
         }
     }
@@ -108,8 +108,8 @@ public class Kernel {
                 continue;
             }
         }
-        totalWaitingTime += readyQueue.size();
-        totalWaitingTime += memoryQueue.size();
+        readyQueueWaitingTime += readyQueue.size();
+        memoryQueueWaitingTime += memoryQueue.size();
     }
 
     private void serviceWaitQueue(int currentTime) {
@@ -158,11 +158,18 @@ public class Kernel {
                 waitQueue.isEmpty();
     }
 
-    public double getAverageWaitingTime() {
+    public double getAverageReadyQueueWaitingTime() {
         if (processCount == 0) {
             return 0;
         }
-        return 1.0 * totalWaitingTime / processCount;
+        return 1.0 * readyQueueWaitingTime / processCount;
+    }
+
+    public double getAverageMemoryQueueWaitingTime() {
+        if (processCount == 0) {
+            return 0;
+        }
+        return 1.0 * memoryQueueWaitingTime / processCount;
     }
 
     public void checkWaitForMemoryQueue() {
