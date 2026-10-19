@@ -33,3 +33,12 @@ Now there are some new tasks.
   - int baseAddress (this is only needed by contiguous allocation)
   - int[] pageTable (this is only needed by paged allocation)
 - [ ] Watch out the process state and admit.
+- [ ] 1. Each message should start with a timestamp [Tick X]
+- [ ] 2. Print a message whenever a process arrives (indicating its memory size), and whether the process is admitted immediately:
+- [ ] If the process can be admitted, for contiguous allocation, print out the starting memory address and allocated size; for paged allocation, print out the page table.
+- [ ] If the process cannot be admitted and is placed on the memory queue, print a message indicating the reason: for contiguous allocation, print out all free block sizes (should all be smaller than what the process needs) and the starting address of each free block; for paged allocation, print out the total number of free frames.
+- [ ] 3. Print a message whenever a process terminates and releases its memory:
+- [ ] For contiguous allocation only, if coalescing happens due to this event, print out the free blocks before and after the coalescing (starting address and size of each free block)
+- [ ] For both allocation schemes, if one or more processes waiting on the memory queue can now be admitted, print a message indicating so; additionally, for contiguous allocation, print out the starting memory address and allocated size; for paged allocation, print out the page table.
+- [ ] 4. Track ready queue waiting time (time a process spends waiting in the ready queue, which is influenced by the CPU scheduling algorithm) and memory queue waiting time (time a process spends waiting in the memory queue, which is influenced by the memory allocation scheme) separately, and calculate the average waiting times separately. You already did the ready queue waiting times in the previous project.
+- [ ] 5. Test case (same workload trace with memory size added; total system memory: 120; page size: 10): Modify: 'OS Projects/workload.txt' is the test case professor provided.
