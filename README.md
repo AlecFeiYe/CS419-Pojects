@@ -22,10 +22,10 @@ Now there are some new tasks.
   - etc.
 - [x] ContiguousAllocation (class): implements MemoryManagement
 - [x] PagedAllocation (class): implements MemoryManagement
-- [ ] When a process arrives, before it can be admitted, the kernel must check if the
+- [x] When a process arrives, before it can be admitted, the kernel must check if the
   process fits in memory. If not, the process must be placed in the memoryQueue (its
   state remains “NEW”)
-- [ ] When a process terminates and its memory is released and potentially coalesced,
+- [x] When a process terminates and its memory is released and potentially coalesced,
   the kernel must scan the memoryQueue to see if one or more processes on the
   queue can now be admitted.
 - [x] A process now has three additional fields:
@@ -42,3 +42,5 @@ Now there are some new tasks.
 - [ ] For both allocation schemes, if one or more processes waiting on the memory queue can now be admitted, print a message indicating so; additionally, for contiguous allocation, print out the starting memory address and allocated size; for paged allocation, print out the page table.
 - [ ] 4. Track ready queue waiting time (time a process spends waiting in the ready queue, which is influenced by the CPU scheduling algorithm) and memory queue waiting time (time a process spends waiting in the memory queue, which is influenced by the memory allocation scheme) separately, and calculate the average waiting times separately. You already did the ready queue waiting times in the previous project.
 - [ ] 5. Test case (same workload trace with memory size added; total system memory: 120; page size: 10): Modify: 'OS Projects/workload.txt' is the test case professor provided.
+
+- [ ] I think there are 2 big and total issues, one of is setting the process state appropriately, one of is showing the time tick correctly. 
