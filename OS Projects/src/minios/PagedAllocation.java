@@ -33,7 +33,8 @@ public class PagedAllocation implements MemoryManagement {
                 }
             }
 
-            System.out.print("[Tick " + clock + "] Paged Allocation. Page Table: [");
+            System.out.print("[Tick " + clock + "] Process " + p.pid +
+                    " is admitted. Paged Allocation. Page Table: [");
             for (int i : p.getPageTable()) {
                 System.out.print(" " + i);
             }
@@ -42,6 +43,10 @@ public class PagedAllocation implements MemoryManagement {
 //            memoryTracker();
             return true;
         }
+        System.out.println("[Tick " + clock + "] Process " + p.pid +
+                " cannot be admitted. Needs " + neededFrames +
+                " frames, but only " + countOfFreeFrames +
+                " free frames are available.");
 //        memoryTracker();
         return false;
     }

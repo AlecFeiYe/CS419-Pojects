@@ -29,20 +29,53 @@ public class ContiguousAllocation implements MemoryManagement {
                 return true;
             } else if (node.getLimit() == processLimit) {
                 process.setBaseAddress(node.getRelocation());
+
+                System.out.println("[Tick " + clock + "] Process " +
+                        process.pid + " is admitted. Contiguous Allocation. " +
+                        "Starting memory address: " + process.getBaseAddress() +
+                        " Allocated size: " + process.getSize());
+
                 MemoryFreeList.remove(node);
                 coalesceMemory();
                 FreeMemoryTrack(clock);
                 return true;
             }
         }
+        System.out.print("[Tick " + clock + "] Process " + process.pid +
+                " cannot be admitted. Needs " + process.getSize() +
+                " units. Free blocks: ");
+
+        for (Node node : MemoryFreeList) {
+            System.out.print(
+                    "[start=" + node.getRelocation() +
+                    ", size=" + node.getLimit() + "] "
+            );
+        }
+
+        System.out.println();
         return false;
     }
 
     @Override
     public void release(Process process, int clock) {
-        System.out.println("[Tick " + clock + "] The memory of Process " + process.pid + " has been released: [" + process.getBaseAddress() + "," + (process.getBaseAddress() + process.getSize()) + "]");
+        System.out.println("[Tick " + clock + "] Process " +
+                process.pid + " releases memory. Starting address: " +
+                process.getBaseAddress() + ", size: " +
+                process.getSize());
         MemoryFreeList.add(new Node(process.getBaseAddress(), process.getSize()));
+
+        System.out.print("[Tick " + clock +
+                "] Free blocks before coalescing: ");
+        printFreeBlocks();
+
+        int beforeSize = MemoryFreeList.size();
         coalesceMemory();
+
+        if (MemoryFreeList.size() < beforeSize) {
+            System.out.print("[Tick " + clock +
+                    "] Free blocks after coalescing: ");
+            printFreeBlocks();
+        }
         FreeMemoryTrack(clock);
     }
 
@@ -78,5 +111,15 @@ public class ContiguousAllocation implements MemoryManagement {
     @Override
     public String getName() {
         return "Contiguous Allocation";
+    }
+
+    private void printFreeBlocks() {
+        for (Node node: MemoryFreeList) {
+            System.out.print(
+                    "[start= " + node.getRelocation() +
+                    ", size = " + node.getLimit() + "] "
+            );
+        }
+        System.out.println();
     }
 }
