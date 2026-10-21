@@ -1,19 +1,5 @@
-# CS419-Pojects
+# CS419 - Project
 ## Development log and Blueprint:
-I have a question about if a process was allocated memory. So it keeps there util it finished? Or only when it is running it has the memory space.
-
-My answer for this question is: a memory space would be released only when the process is finished.
-
-Maybe it is not right. 
-
-- [x] I still have trouble to decide where and when to check the waitForMemoryQueue
-- [x] Watch out! The calculating of average time isn't right now! Because there are some process wait in waitForMemoryQueue.
-- [x] We still need to track who go to the waitqueue to make sure everything works well.
-
-10/2/2026:
-
-My previous code was written before Project 3 was officially posted on canvas. 
-Now there are some new tasks.
 
 - [x] MemoryManagement (interface): declares common methods that are used by both
   - allocation schemes, including:
@@ -43,4 +29,4 @@ Now there are some new tasks.
 - [x] 4. Track ready queue waiting time (time a process spends waiting in the ready queue, which is influenced by the CPU scheduling algorithm) and memory queue waiting time (time a process spends waiting in the memory queue, which is influenced by the memory allocation scheme) separately, and calculate the average waiting times separately. You already did the ready queue waiting times in the previous project.
 - [x] 5. Test case (same workload trace with memory size added; total system memory: 120; page size: 10): Modify: 'OS Projects/workload.txt' is the test case professor provided.
 
-- [ ] I think there are 2 big and total issues, one of is setting the process state appropriately, one of is showing the time tick correctly. 
+- [ ] I think there are 2 big and total issues, one of is setting the process state appropriately, one of is showing the time tick correctly.
