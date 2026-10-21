@@ -24,7 +24,7 @@ public class Simulator {
             while (it.hasNext()) {
                 Process p = it.next();
                 if (p.arrivalTime == clock) {
-                    System.out.print("[Tick " + clock + "] Process " + p.pid + " arrives. Require memory size: " + p.getSize());
+                    System.out.println("[Tick " + clock + "] Process " + p.pid + " arrives. Memory size: " + p.getSize());
                     kernel.admitProcess(p, clock);
                     it.remove();
                 }
@@ -53,14 +53,16 @@ public class Simulator {
 
         for (MemoryManagement memoryManagement : memoryManagementList) {
 
+            System.out.println("-".repeat(100));
             System.out.println("Running Algorithm: " + algo.getName() + "\nUsing Memory Manager: " + memoryManagement.getName());
+            System.out.println("-".repeat(100));
 
             List<Process> workload = TraceParser.parseWorkload(filePath);
             Kernel kernel = new Kernel(algo, memoryManagement);
             Simulator sim = new Simulator(kernel, workload);
             sim.run();
             averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n" + "Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime());
-            System.out.println("Average Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n");
+            System.out.println("\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n");
             System.out.println("Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime() + "\n");
         }
 
