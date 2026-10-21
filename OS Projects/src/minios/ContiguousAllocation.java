@@ -13,25 +13,25 @@ public class ContiguousAllocation implements MemoryManagement {
     }
 
     @Override
-    public boolean allocate(Process process) {
+    public boolean allocate(Process process, int clock) {
         int processLimit = process.getSize();
 
         for (Node node : MemoryFreeList) {
             if (node.getLimit() > processLimit) {
                 process.setBaseAddress(node.getRelocation());
 
-                System.out.println("\nA new memory has been allocated to Process " + process.pid + ": [" + process.getBaseAddress() + "," + (process.getBaseAddress() + process.getSize()) + "]");
+                System.out.println("[Tick " + clock + "] Process " + process.pid + " is admitted. Contiguous Allocation. Starting memory address: " + process.getBaseAddress() + " Allocated size : " + process.getSize());
 
                 MemoryFreeList.add(new Node(node.getRelocation() + processLimit, node.getLimit() - processLimit));
                 MemoryFreeList.remove(node);
-                updateMemory();
-                FreeMemoryTrack();
+                coalesceMemory();
+                FreeMemoryTrack(clock);
                 return true;
             } else if (node.getLimit() == processLimit) {
                 process.setBaseAddress(node.getRelocation());
                 MemoryFreeList.remove(node);
-                updateMemory();
-                FreeMemoryTrack();
+                coalesceMemory();
+                FreeMemoryTrack(clock);
                 return true;
             }
         }
@@ -39,14 +39,14 @@ public class ContiguousAllocation implements MemoryManagement {
     }
 
     @Override
-    public void release(Process process) {
-        System.out.println("\nThe memory of Process " + process.pid + " has been released: [" + process.getBaseAddress() + "," + (process.getBaseAddress() + process.getSize()) + "]");
+    public void release(Process process, int clock) {
+        System.out.println("[Tick " + clock + "] The memory of Process " + process.pid + " has been released: [" + process.getBaseAddress() + "," + (process.getBaseAddress() + process.getSize()) + "]");
         MemoryFreeList.add(new Node(process.getBaseAddress(), process.getSize()));
-        updateMemory();
-        FreeMemoryTrack();
+        coalesceMemory();
+        FreeMemoryTrack(clock);
     }
 
-    private void updateMemory() {
+    private void coalesceMemory() {
         MemoryFreeList.sort(Comparator.comparingInt(Node::getRelocation));
 
         for (int i = 0; i < MemoryFreeList.size() - 1; ) {
@@ -67,12 +67,12 @@ public class ContiguousAllocation implements MemoryManagement {
         return MemoryFreeList;
     }
 
-    private void FreeMemoryTrack() {
-        System.out.print("Free Memory Track:");
+    private void FreeMemoryTrack(int clock) {
+        System.out.print("[Tick " + clock + "] Free Memory Track:");
         for (Node n : MemoryFreeList) {
             System.out.print("[" + n.getRelocation() + "," + n.getNodeEndPoint() + "] ");
         }
-        System.out.println("\n");
+        System.out.println();
     }
 
     @Override
