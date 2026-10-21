@@ -14,7 +14,7 @@ public class PagedAllocation implements MemoryManagement {
     }
 
     @Override
-    public boolean allocate(Process p) {
+    public boolean allocate(Process p, int clock) {
         int neededFrames = (p.getSize() - 1) / frameSize + 1;
         p.setPageTable(neededFrames);
         int countOfFreeFrames = 0;
@@ -32,21 +32,29 @@ public class PagedAllocation implements MemoryManagement {
                     restOfNeededFrames--;
                 }
             }
-            memoryTracker();
+
+            System.out.print("[Tick " + clock + "] Paged Allocation. Page Table: [");
+            for (int i : p.getPageTable()) {
+                System.out.print(" " + i);
+            }
+            System.out.println("]");
+
+//            memoryTracker();
             return true;
         }
-        memoryTracker();
+//        memoryTracker();
         return false;
     }
 
     @Override
-    public void release(Process p) {
+    public void release(Process p, int clock) {
         int[] tempPage = p.getPageTable();
         for (int i = 0; i < tempPage.length; i++) {
             framesArray[tempPage[i]] = false;
             p.modifyPageTable(i, -1);
         }
-        memoryTracker();
+        System.out.println("[Tick " + clock + "] The memory of Process " + p.pid + " has been released.");
+//        memoryTracker();
     }
 
     @Override
