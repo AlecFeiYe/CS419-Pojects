@@ -22,12 +22,12 @@ public class Kernel {
 
     public void admitProcess(Process p, int clock) {
         processCount++;
-        checkWaitForMemoryQueue();
-        if (memoryManager.allocate(p)) {
+        checkWaitForMemoryQueue(clock);
+        if (memoryManager.allocate(p, clock)) {
             p.state = Process.State.READY;
             algo.addProcess(readyQueue, p);
         } else {
-            System.out.println("\n[Tick " + clock + "] Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
+            System.out.println("[Tick " + clock + "] Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
             memoryQueue.add(p);
         }
     }
@@ -54,7 +54,7 @@ public class Kernel {
             // Current process has finished.
             if (inst == null) {
                 System.out.println("[Tick " + currentTime + "] Process " + runningProcess.pid + " Terminates.");
-                terminateProcess(runningProcess);
+                terminateProcess(runningProcess, currentTime);
                 // In this case, no instruction is executed, so no CPU cycle
                 // is used. Can't advance the simulation clock. Loop
                 // back and grab the next process to execute.
@@ -133,11 +133,12 @@ public class Kernel {
         }
     }
 
-    private void terminateProcess(Process p) {
-        memoryManager.release(p);
+    private void terminateProcess(Process p, int clock) {
+        memoryManager.release(p, clock);
         p.state = Process.State.TERMINATED;
         runningProcess = null;
-        checkWaitForMemoryQueue();
+        checkWaitForMemoryQueue(clock);
+
     }
 
     private Process dispatchNextProcess(int currentTime) {
@@ -172,12 +173,12 @@ public class Kernel {
         return 1.0 * memoryQueueWaitingTime / processCount;
     }
 
-    public void checkWaitForMemoryQueue() {
+    public void checkWaitForMemoryQueue(int clock) {
         Iterator<Process> it = memoryQueue.iterator();
         while (it.hasNext()) {
             Process p = it.next();
-            if (memoryManager.allocate(p)) {
-                System.out.println("Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
+            if (memoryManager.allocate(p,clock)) {
+                System.out.println("[Tick " + clock + "] Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
                 p.state = Process.State.READY;
                 algo.addProcess(readyQueue, p);
                 it.remove();
