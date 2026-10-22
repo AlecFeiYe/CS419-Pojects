@@ -1,0 +1,17 @@
+out/
+build/
+*.class
+*.jar
+*.war
+
+.idea/workspace.xml
+.idea/shelf/
+.idea/httpRequests/
+
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+*.tmp
+*.bak
