@@ -16,34 +16,37 @@ public class PagedAllocation implements MemoryManagement {
     @Override
     public boolean allocate(Process p, int clock) {
         int neededFrames = (p.getSize() - 1) / frameSize + 1;
-        p.setPageTable(neededFrames);
+
         int countOfFreeFrames = 0;
-        for (boolean i : framesArray) {
-            if (!i) {
+        for (boolean used : framesArray) {
+            if (!used) {
                 countOfFreeFrames++;
             }
         }
-        int restOfNeededFrames = neededFrames;
-        if (countOfFreeFrames >= neededFrames) {
-            for (int i = 0; i < numberOfFrames && restOfNeededFrames > 0; i++) {
-                if (!framesArray[i]) {
-                    p.modifyPageTable(neededFrames - restOfNeededFrames, i);
-                    framesArray[i] = true;
-                    restOfNeededFrames--;
-                }
-            }
 
-            System.out.print("[Tick " + clock + "] Paged Allocation. Page Table: [");
-            for (int i : p.getPageTable()) {
-                System.out.print(" " + i);
-            }
-            System.out.println("]");
-
-//            memoryTracker();
-            return true;
+        if (countOfFreeFrames < neededFrames) {
+            System.out.println("[Tick " + clock + "] Process " + p.pid
+                    + " cannot be admitted. Requested frames: " + neededFrames
+                    + ", total free frames: " + countOfFreeFrames);
+            return false;
         }
-//        memoryTracker();
-        return false;
+
+        p.setPageTable(neededFrames);
+        int restOfNeededFrames = neededFrames;
+        for (int i = 0; i < numberOfFrames && restOfNeededFrames > 0; i++) {
+            if (!framesArray[i]) {
+                p.modifyPageTable(neededFrames - restOfNeededFrames, i);
+                framesArray[i] = true;
+                restOfNeededFrames--;
+            }
+        }
+
+        System.out.print("[Tick " + clock + "] Paged Allocation. Page Table: [");
+        for (int frame : p.getPageTable()) {
+            System.out.print(" " + frame);
+        }
+        System.out.println("]");
+        return true;
     }
 
     @Override
