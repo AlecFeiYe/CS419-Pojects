@@ -1,8 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Simulator" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="minios.Simulator" />
-    <module name="CS419-Pojects3" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <module name="Project 3" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
