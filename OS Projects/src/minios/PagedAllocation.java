@@ -5,12 +5,14 @@ public class PagedAllocation implements MemoryManagement {
     private final int frameSize;
     private final int numberOfFrames;
     private boolean[] framesArray;
+    private int physicalMemory[];
 
     public PagedAllocation(int size, int frameSize) {
         this.size = size;
         this.frameSize = frameSize;
         this.numberOfFrames = this.size / frameSize;
         this.framesArray = new boolean[numberOfFrames];
+        this.physicalMemory = new int[size];
     }
 
     @Override

@@ -6,10 +6,12 @@ import java.util.List;
 
 public class ContiguousAllocation implements MemoryManagement {
     private final List<Node> MemoryFreeList;
+    private int physicalMemory[];
 
-    public ContiguousAllocation(int limit) {
+    public ContiguousAllocation(int size) {
         MemoryFreeList = new LinkedList<Node>();
-        MemoryFreeList.add(new Node(0, limit));
+        MemoryFreeList.add(new Node(0, size));
+        physicalMemory = new int[size];
     }
 
     @Override
