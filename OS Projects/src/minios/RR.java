@@ -16,6 +16,7 @@ public class RR implements SchedulingAlgo {
         if (readyQueue.isEmpty()) {
             return null;
         } else {
+            timeUsed = 0;
             return readyQueue.remove(0);
         }
     }
@@ -30,10 +31,6 @@ public class RR implements SchedulingAlgo {
     }
 
     public boolean isQuantumExpired() {
-        if (timeUsed >= TIME_QUANTUM) {
-            timeUsed = 0;
-            return true;
-        }
-        return false;
+        return timeUsed >= TIME_QUANTUM;
     }
 }
