@@ -1,5 +1,6 @@
 package minios;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class Simulator {
             while (it.hasNext()) {
                 Process p = it.next();
                 if (p.arrivalTime == clock) {
-                    System.out.println("[Tick " + clock + "] Process " + p.pid + " arrives.");
-                    kernel.admitProcess(p);
+                    System.out.println("[Tick " + clock + "] Process " + p.pid + " arrives. Memory size: " + p.getSize());
+                    kernel.admitProcess(p, clock);
                     it.remove();
                 }
             }
@@ -39,17 +40,35 @@ public class Simulator {
     }
 
     public static void main(String[] args) throws Exception {
-        List<Process> workload = TraceParser.parseWorkload("OS Projects/workload.txt");
 
-        //SchedulingAlgo algo = new FCFS();
-        //SchedulingAlgo algo = new SJF();
-        SchedulingAlgo algo = new RR();
-        Kernel kernel = new Kernel(algo);
-        Simulator sim = new Simulator(kernel, workload);
+        String filePath = "OS Projects/workloadProject4.txt";
 
-        sim.run();
+        SchedulingAlgo algo = new FCFS();
 
-        System.out.println("Average waiting time: " + kernel.getAverageWaitingTime() + " ticks\n");
+        List<MemoryManagement> memoryManagementList = new ArrayList<>();
+        memoryManagementList.add(new ContiguousAllocation(120));
+        memoryManagementList.add(new PagedAllocation(120, 10));
+
+        List<String> averageWaitTimeList = new ArrayList<>();
+
+        for (MemoryManagement memoryManagement : memoryManagementList) {
+
+            System.out.println("-".repeat(100));
+            System.out.println("Running Algorithm: " + algo.getName() + "\nUsing Memory Manager: " + memoryManagement.getName());
+            System.out.println("-".repeat(100));
+
+            List<Process> workload = TraceParser.parseWorkload(filePath);
+            Kernel kernel = new Kernel(algo, memoryManagement);
+            Simulator sim = new Simulator(kernel, workload);
+            sim.run();
+            averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n" + "Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime());
+            System.out.println("\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n");
+            System.out.println("Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime() + "\n");
+        }
+
+        System.out.println("----------  Conclusion and Comparing  ----------\n");
+        for (String messages : averageWaitTimeList) {
+            System.out.println(messages);
+        }
     }
-
 }

@@ -11,4 +11,6 @@ public interface SchedulingAlgo {
     // If no process is available (i.e., Ready Queue is entry),
     // return null
     Process selectNextProcess(List<Process> readyQueue);
+
+    String getName();
 }

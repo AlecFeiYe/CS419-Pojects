@@ -1,1 +1,2 @@
-# CS419-Pojects
+# CS419 - Project
+## Development log and Blueprint:

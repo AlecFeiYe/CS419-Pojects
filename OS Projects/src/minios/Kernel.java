@@ -6,20 +6,30 @@ import java.util.List;
 
 public class Kernel {
     private final SchedulingAlgo algo;
+    private final MemoryManagement memoryManager;
     private final List<Process> readyQueue = new ArrayList<>();
     private final List<Process> waitQueue = new ArrayList<>();
+    private final List<Process> memoryQueue = new ArrayList<>();
     private Process runningProcess = null;
-    private long totalWaitingTime = 0;
+    private long readyQueueWaitingTime = 0;
+    private long memoryQueueWaitingTime = 0;
     private int processCount = 0;
 
-    public Kernel(SchedulingAlgo algo) {
+    public Kernel(SchedulingAlgo algo, MemoryManagement memoryManager) {
         this.algo = algo;
+        this.memoryManager = memoryManager;
     }
 
-    public void admitProcess(Process p) {
+    public void admitProcess(Process p, int clock) {
         processCount++;
-        p.state = Process.State.READY;
-        algo.addProcess(readyQueue, p);
+        checkWaitForMemoryQueue(clock);
+        if (memoryManager.allocate(p, clock)) {
+            p.state = Process.State.READY;
+            algo.addProcess(readyQueue, p);
+        } else {
+            System.out.println("[Tick " + clock + "] Oops! There are no enough memory. Process: " + p.pid + " go to the waitFroMemoryQueue.");
+            memoryQueue.add(p);
+        }
     }
 
     // Called on every clock tick
@@ -44,7 +54,7 @@ public class Kernel {
             // Current process has finished.
             if (inst == null) {
                 System.out.println("[Tick " + currentTime + "] Process " + runningProcess.pid + " Terminates.");
-                terminateProcess(runningProcess);
+                terminateProcess(runningProcess, currentTime);
                 // In this case, no instruction is executed, so no CPU cycle
                 // is used. Can't advance the simulation clock. Loop
                 // back and grab the next process to execute.
@@ -98,7 +108,8 @@ public class Kernel {
                 continue;
             }
         }
-        totalWaitingTime += readyQueue.size();
+        readyQueueWaitingTime += readyQueue.size();
+        memoryQueueWaitingTime += memoryQueue.size();
     }
 
     private void serviceWaitQueue(int currentTime) {
@@ -122,9 +133,12 @@ public class Kernel {
         }
     }
 
-    private void terminateProcess(Process p) {
+    private void terminateProcess(Process p, int clock) {
+        memoryManager.release(p, clock);
         p.state = Process.State.TERMINATED;
         runningProcess = null;
+        checkWaitForMemoryQueue(clock);
+
     }
 
     private Process dispatchNextProcess(int currentTime) {
@@ -145,10 +159,31 @@ public class Kernel {
                 waitQueue.isEmpty();
     }
 
-    public double getAverageWaitingTime() {
+    public double getAverageReadyQueueWaitingTime() {
         if (processCount == 0) {
             return 0;
         }
-        return 1.0 * totalWaitingTime / processCount;
+        return 1.0 * readyQueueWaitingTime / processCount;
+    }
+
+    public double getAverageMemoryQueueWaitingTime() {
+        if (processCount == 0) {
+            return 0;
+        }
+        return 1.0 * memoryQueueWaitingTime / processCount;
+    }
+
+    public void checkWaitForMemoryQueue(int clock) {
+        Iterator<Process> it = memoryQueue.iterator();
+        while (it.hasNext()) {
+            Process p = it.next();
+            if (memoryManager.allocate(p,clock)) {
+                System.out.println("[Tick " + clock + "] Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
+                p.state = Process.State.READY;
+                algo.addProcess(readyQueue, p);
+                it.remove();
+            }
+        }
+
     }
 }
