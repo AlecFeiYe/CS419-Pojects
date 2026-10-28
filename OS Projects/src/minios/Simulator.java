@@ -41,7 +41,7 @@ public class Simulator {
 
     public static void main(String[] args) throws Exception {
 
-        String filePath = "OS Projects/workload.txt";
+        String filePath = "OS Projects/workloadProject4.txt";
 
         SchedulingAlgo algo = new FCFS();
 
