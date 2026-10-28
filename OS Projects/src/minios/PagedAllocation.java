@@ -77,4 +77,25 @@ public class PagedAllocation implements MemoryManagement {
         }
         System.out.println();
     }
+
+    @Override
+    public void store(Instruction instruction) {
+        this.physicalMemory[instruction.address] = instruction.value;
+    }
+
+    @Override
+    public int load(Instruction instruction) {
+        return this.physicalMemory[instruction.address];
+    }
+
+    @Override
+    public int translate(Process p, int addr) {
+        if (addr > p.getSize()) {
+            System.out.println("Invalid address: Memory Out Of Bounds");
+            return -1;
+        }
+        else {
+            return this.physicalMemory[addr];
+        }
+    }
 }

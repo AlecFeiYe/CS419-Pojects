@@ -9,9 +9,9 @@ public class ContiguousAllocation implements MemoryManagement {
     private int physicalMemory[];
 
     public ContiguousAllocation(int size) {
-        MemoryFreeList = new LinkedList<Node>();
-        MemoryFreeList.add(new Node(0, size));
-        physicalMemory = new int[size];
+        this.MemoryFreeList = new LinkedList<Node>();
+        this.MemoryFreeList.add(new Node(0, size));
+        this.physicalMemory = new int[size];
     }
 
     @Override
@@ -126,5 +126,26 @@ public class ContiguousAllocation implements MemoryManagement {
     @Override
     public String getName() {
         return "Contiguous Allocation";
+    }
+
+    @Override
+    public void store(Instruction instruction) {
+        this.physicalMemory[instruction.address] = instruction.value;
+    }
+
+    @Override
+    public int load(Instruction instruction) {
+        return this.physicalMemory[instruction.address];
+    }
+
+    @Override
+    public int translate(Process p, int addr) {
+        if (addr > p.getSize()) {
+            System.out.println("Invalid address: Memory Out Of Bounds");
+            return -1;
+        }
+        else {
+            return this.physicalMemory[addr];
+        }
     }
 }
