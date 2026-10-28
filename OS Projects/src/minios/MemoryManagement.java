@@ -5,4 +5,6 @@ public interface MemoryManagement {
     void release(Process p,int clock);
     String getName();
     int translate(Process p, int addr);
+    void store(Instruction instruction);
+    int load(Instruction instruction);
 }
