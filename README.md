@@ -40,3 +40,5 @@ Note that a given virtual address could be invalid (i.e., outside the process’
 - [ ] Each time a virtual address is translated, print out both the virtual and physical addresses.
 - [ ] Each time a LOAD instruction executes, print out the value loaded
 - [ ] Each time an invalid address is detected when executing a STORE or LOAD instruction, print out a warning message including the process ID and the instruction details.
+
+- [ ] In the file 'TraceParser': I don't know why for case COMPUTE we don't need to do anything.
