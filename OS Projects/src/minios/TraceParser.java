@@ -14,7 +14,7 @@ public class TraceParser {
             String line;
             int currentPid = -1;
             int currentArrival = -1;
-            int requiredMemorySpace = -1;
+            int currentMemorySize = -1;
             List<Instruction> currentInstructions = new ArrayList<>();
 
             while ((line = br.readLine()) != null) {
@@ -23,7 +23,7 @@ public class TraceParser {
                 // Blank line signifies the end of a process block
                 if (line.isEmpty()) {
                     if (currentPid != -1) {
-                        processes.add(new Process(currentPid, currentArrival, currentInstructions, requiredMemorySpace));
+                        processes.add(new Process(currentPid, currentArrival, currentInstructions, currentMemorySize));
                         currentPid = -1;
                         currentInstructions = new ArrayList<>(); // Reset for next process
                     }
@@ -34,7 +34,7 @@ public class TraceParser {
                     String[] parts = line.split("\\s+");
                     currentPid = Integer.parseInt(parts[1]);
                     currentArrival = Integer.parseInt(parts[2]);
-                    requiredMemorySpace = Integer.parseInt(parts[3]);
+                    currentMemorySize = Integer.parseInt(parts[3]);
                 } else {
                     // initialize the instruction and add to the process's code block
                     String[] parts = line.split("\\s+");
@@ -61,7 +61,7 @@ public class TraceParser {
 
             // Add the final process (in case the trace doesn't end with a blank line)
             if (currentPid != -1) {
-                processes.add(new Process(currentPid, currentArrival, currentInstructions, requiredMemorySpace));
+                processes.add(new Process(currentPid, currentArrival, currentInstructions, currentMemorySize));
             }
         }
         return processes;
