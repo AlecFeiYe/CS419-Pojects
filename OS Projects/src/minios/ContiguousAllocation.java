@@ -143,9 +143,8 @@ public class ContiguousAllocation implements MemoryManagement {
         if (addr < 0 || addr >= p.getSize()) {
             System.out.println("Invalid address: Memory Out Of Bounds");
             return -1;
-        }
-        else {
-            return this.physicalMemory[addr];
+        } else {
+            return addr + p.getBaseAddress();
         }
     }
 }
