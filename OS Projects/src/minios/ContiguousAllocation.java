@@ -140,7 +140,7 @@ public class ContiguousAllocation implements MemoryManagement {
 
     @Override
     public int translate(Process p, int addr) {
-        if (addr > p.getSize()) {
+        if (addr < 0 || addr >= p.getSize()) {
             System.out.println("Invalid address: Memory Out Of Bounds");
             return -1;
         }
