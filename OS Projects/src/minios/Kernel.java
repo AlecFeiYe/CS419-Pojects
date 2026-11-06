@@ -61,9 +61,9 @@ public class Kernel {
                 continue;
             }
 
-            // I/O instruction: process enters I/O and no longer uses CPU
-            // (Assume this transition itself doesn't consume CPU cycles.)
-            else if (inst.type != Instruction.OpType.CPU) {
+//             I/O instruction: process enters I/O and no longer uses CPU
+//             (Assume this transition itself doesn't consume CPU cycles.)
+            else if (inst.type == Instruction.OpType.IO) {
                 System.out.println("[Tick " + currentTime + "] Process " + runningProcess.pid + " enters I/O wait.");
                 runningProcess.state = Process.State.BLOCKED;
                 waitQueue.add(runningProcess);
