@@ -92,9 +92,10 @@ public class PagedAllocation implements MemoryManagement {
     public int translate(Process p, int addr) {
         if (addr < 0 || addr >= p.getSize()) {
             return -1;
-        }
-        else {
-            return this.physicalMemory[addr];
+        } else {
+            int page = addr / frameSize;
+            int offset = addr % frameSize;
+            return p.getPageTable()[page] * frameSize + offset;
         }
     }
 }
