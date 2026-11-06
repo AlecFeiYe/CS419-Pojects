@@ -84,8 +84,8 @@ public class PagedAllocation implements MemoryManagement {
     }
 
     @Override
-    public int load(Instruction instruction) {
-        return this.physicalMemory[instruction.address];
+    public int load(int physicalAddress) {
+        return physicalMemory[physicalAddress];
     }
 
     @Override
