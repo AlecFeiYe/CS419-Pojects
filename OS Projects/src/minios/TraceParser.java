@@ -41,8 +41,6 @@ public class TraceParser {
                     Instruction.OpType type = Instruction.OpType.valueOf(parts[0].toUpperCase());
                     switch (type) {
                         case COMPUTE:
-                            currentInstructions.add(new Instruction(type, Integer.parseInt(parts[1])));
-                            break;
                         case IO:
                             currentInstructions.add(new Instruction(type, Integer.parseInt(parts[1])));
                             break;
