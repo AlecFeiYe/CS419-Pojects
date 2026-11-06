@@ -129,8 +129,8 @@ public class ContiguousAllocation implements MemoryManagement {
     }
 
     @Override
-    public void store(Instruction instruction) {
-        this.physicalMemory[instruction.address] = instruction.value;
+    public void store(int physicalAddress,int value) {
+        physicalMemory[physicalAddress] = value;
     }
 
     @Override
