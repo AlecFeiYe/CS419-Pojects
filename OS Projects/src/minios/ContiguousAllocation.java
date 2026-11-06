@@ -103,11 +103,6 @@ public class ContiguousAllocation implements MemoryManagement {
         }
     }
 
-    //only for test;
-    public List<Node> getMemoryFreeList() {
-        return MemoryFreeList;
-    }
-
     private void FreeMemoryTrack(int clock) {
         System.out.print("[Tick " + clock + "] Free Memory Track:");
         for (Node n : MemoryFreeList) {
@@ -141,7 +136,6 @@ public class ContiguousAllocation implements MemoryManagement {
     @Override
     public int translate(Process p, int addr) {
         if (addr < 0 || addr >= p.getSize()) {
-            System.out.println("Invalid address: Memory Out Of Bounds");
             return -1;
         } else {
             return addr + p.getBaseAddress();
