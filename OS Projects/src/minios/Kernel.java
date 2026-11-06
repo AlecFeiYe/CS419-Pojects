@@ -71,6 +71,25 @@ public class Kernel {
                 // Can't advance the simulation clock. Loop back
                 // and grab the next process to execute.
                 continue;
+            } else if (inst.type == Instruction.OpType.STORE) {
+                cpuCycleUsed = true;
+                if (store(runningProcess, inst, currentTime)) {
+                    runningProcess.programCounter++;
+                } else {
+                    System.out.printf("[Tick %d] Process %d: invalid address in STORE %d %d\n",
+                            currentTime, runningProcess.pid, inst.address, inst.value);
+                    terminateProcess(runningProcess, currentTime);
+                }
+            } else if (inst.type == Instruction.OpType.LOAD) {
+                cpuCycleUsed = true;
+
+                if (load(runningProcess, inst, currentTime)) {
+                    runningProcess.programCounter++;
+                } else {
+                    System.out.printf("[Tick %d] Process %d: invalid address in LOAD %d\n",
+                            currentTime, runningProcess.pid, inst.address);
+                    terminateProcess(runningProcess, currentTime);
+                }
             }
 
             // CPU instruction: the instruction has not finished;
