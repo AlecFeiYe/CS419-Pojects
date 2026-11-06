@@ -91,7 +91,6 @@ public class Kernel {
                     terminateProcess(runningProcess, currentTime);
                 }
             }
-
             // CPU instruction: the instruction has not finished;
             // Utilize one CPU cycle
             else if (inst.remainingTicks > 0) {
@@ -196,7 +195,7 @@ public class Kernel {
         Iterator<Process> it = memoryQueue.iterator();
         while (it.hasNext()) {
             Process p = it.next();
-            if (memoryManager.allocate(p,clock)) {
+            if (memoryManager.allocate(p, clock)) {
                 System.out.println("[Tick " + clock + "] Yeah! There are some Space. Process: " + p.pid + " go out of the waitFroMemoryQueue to execute.");
                 p.state = Process.State.READY;
                 algo.addProcess(readyQueue, p);
@@ -204,5 +203,26 @@ public class Kernel {
             }
         }
 
+    }
+
+    public boolean store(Process p, Instruction inst, int clock) {
+        int physicalAddress = memoryManager.translate(p, inst.address);
+        if (physicalAddress == -1) {
+            return false;
+        } else {
+            System.out.printf("[Tick %d] Process %d: STORE virtual = %d physical = %d value = %d\n", clock, p.pid, inst.address, physicalAddress, inst.value);
+            memoryManager.store(physicalAddress, inst.value);
+            return true;
+        }
+    }
+
+    public boolean load(Process p, Instruction inst, int clock) {
+        int physicalAddress = memoryManager.translate(p, inst.address);
+        if (physicalAddress == -1) {
+            return false;
+        } else {
+            System.out.printf("[Tick %d] Process %d: LOAD virtual = %d physical = %d value = %d\n", clock, p.pid, inst.address, physicalAddress, memoryManager.load(physicalAddress));
+            return true;
+        }
     }
 }
