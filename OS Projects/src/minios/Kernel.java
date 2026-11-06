@@ -22,7 +22,6 @@ public class Kernel {
 
     public void admitProcess(Process p, int clock) {
         processCount++;
-        checkWaitForMemoryQueue(clock);
         if (memoryManager.allocate(p, clock)) {
             p.state = Process.State.READY;
             algo.addProcess(readyQueue, p);
@@ -174,7 +173,8 @@ public class Kernel {
     public boolean isIdle() {
         return runningProcess == null &&
                 readyQueue.isEmpty() &&
-                waitQueue.isEmpty();
+                waitQueue.isEmpty() &&
+                memoryQueue.isEmpty();
     }
 
     public double getAverageReadyQueueWaitingTime() {
