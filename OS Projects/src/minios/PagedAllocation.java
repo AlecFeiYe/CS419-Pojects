@@ -90,8 +90,7 @@ public class PagedAllocation implements MemoryManagement {
 
     @Override
     public int translate(Process p, int addr) {
-        if (addr > p.getSize()) {
-            System.out.println("Invalid address: Memory Out Of Bounds");
+        if (addr < 0 || addr >= p.getSize()) {
             return -1;
         }
         else {
