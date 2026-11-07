@@ -14,7 +14,7 @@ public class Simulator {
         this.incomingProcesses = processes;
     }
 
-    public void run() {
+    public void run(int totalMemory) {
         // Continue the simulation as long as:
         // 1. there are more processes to come; or
         // 2. one or more existing processes have not completed yet
@@ -25,7 +25,14 @@ public class Simulator {
                 Process p = it.next();
                 if (p.arrivalTime == clock) {
                     System.out.println("[Tick " + clock + "] Process " + p.pid + " arrives. Memory size: " + p.getSize());
-                    kernel.admitProcess(p, clock);
+                    if (p.getSize() > totalMemory) {
+                        System.out.printf(
+                                "[Tick %d] Process %d rejected: requested %d memory units, system capacity is %d.%n",
+                                clock, p.pid, p.getSize(), totalMemory
+                        );
+                    } else {
+                        kernel.admitProcess(p, clock);
+                    }
                     it.remove();
                 }
             }
@@ -44,10 +51,12 @@ public class Simulator {
         String filePath = "OS Projects/workloadProject4.txt";
 
         SchedulingAlgo algo = new FCFS();
+        int totalMemory = 120;
+        int frameSize =10;
 
         List<MemoryManagement> memoryManagementList = new ArrayList<>();
-        memoryManagementList.add(new ContiguousAllocation(120));
-        memoryManagementList.add(new PagedAllocation(120, 10));
+        memoryManagementList.add(new ContiguousAllocation(totalMemory));
+        memoryManagementList.add(new PagedAllocation(totalMemory, frameSize));
 
         List<String> averageWaitTimeList = new ArrayList<>();
 
@@ -60,7 +69,7 @@ public class Simulator {
             List<Process> workload = TraceParser.parseWorkload(filePath);
             Kernel kernel = new Kernel(algo, memoryManagement);
             Simulator sim = new Simulator(kernel, workload);
-            sim.run();
+            sim.run(totalMemory);
             averageWaitTimeList.add("Algorithm: " + algo.getName() + "\nMemory Manager: " + memoryManagement.getName() + "\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n" + "Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime());
             System.out.println("\nAverage Ready Queue Waiting Time: " + kernel.getAverageReadyQueueWaitingTime() + "\n");
             System.out.println("Average Memory Queue Waiting Time: " + kernel.getAverageMemoryQueueWaitingTime() + "\n");
